@@ -28,6 +28,14 @@ const testData = [
  */
 export default function Combo_box(props) {
     const {
+        onExitComplete,
+        onFocusOutside,
+        onHighlightChange,
+        onInputValueChange,
+        onInteractOutside,
+        onOpenChange,
+        onPointerDownOutside,
+        onValueChange,
         settings,
         hideLabel,
         labelText,
@@ -35,6 +43,9 @@ export default function Combo_box(props) {
         placeholder,
         inputSettings,
         contentSettings,
+        dataBy,
+        dataFile,
+        dataObject,
         items,
         triggerSVG,
         clearSVG,
@@ -45,22 +56,24 @@ export default function Combo_box(props) {
 
     const [options, setOptions] = useState(testData)
     const [nodes, setNodeOptions] = useState([])
-
+    console.log(dataFile)
     //Handles the initial set up of gathering all data-keys
     useEffect(() => {
-        const nodeList = document.querySelectorAll("[data-key]")
-        const stringValues = []
-        nodeList.forEach((element) => {
-            // Retrieve the value of 'data-key' attribute for each element
-            const dataKeyValue = element.getAttribute("data-key")
-            if (!stringValues.includes(dataKeyValue)) {
-                stringValues.push(dataKeyValue)
+        if (dataBy == "Auto") {
+            const nodeList = document.querySelectorAll("[data-key]")
+            const stringValues = []
+            nodeList.forEach((element) => {
+                // Retrieve the value of 'data-key' attribute for each element
+                const dataKeyValue = element.getAttribute("data-key")
+                if (!stringValues.includes(dataKeyValue)) {
+                    stringValues.push(dataKeyValue)
+                }
+            })
+            if (stringValues.length != 0) {
+                setOptions(stringValues)
             }
-        })
-        if (stringValues.length != 0) {
-            setOptions(stringValues)
+            setNodeOptions(nodeList)
         }
-        setNodeOptions(nodeList)
     }, [])
 
     //Handles value change updating the collection
@@ -212,6 +225,9 @@ export default function Combo_box(props) {
             background: items.hover.bgColor,
             color: items.hover.color,
         },
+        "&[disabled]": {
+            color: items.disabledColor,
+        },
         "&[data-highlighted]": {
             background: items.hover.bgColor,
             color: items.hover.color,
@@ -231,8 +247,16 @@ export default function Combo_box(props) {
             placeholder={placeholder}
             multiple={settings.multiSelect}
             style={...style}
+            loop={settings.loop}
             items={options}
             selectOnBlur={false}
+            onFocusOutside={onFocusOutside}
+            onHighlightChange={onHighlightChange}
+            onInputValueChange={onInputValueChange}
+            onInteractOutside={onInputValueChange}
+            onOpenChange={onOpenChange}
+            onPointerDownOutside={onPointerDownOutside}
+            onValueChange={onValueChange}
             data-prefab-id={settings.UID}
             openOnClick={settings.openOnClick}
         >
@@ -291,6 +315,27 @@ export default function Combo_box(props) {
 }
 
 addPropertyControls(Combo_box, {
+    onFocusOutside: {
+        type: ControlType.EventHandler,
+    },
+    onHighlightChange: {
+        type: ControlType.EventHandler,
+    },
+    onInputValueChange: {
+        type: ControlType.EventHandler,
+    },
+    onInteractOutside: {
+        type: ControlType.EventHandler,
+    },
+    onOpenChange: {
+        type: ControlType.EventHandler,
+    },
+    onPointerDownOutside: {
+        type: ControlType.EventHandler,
+    },
+    onValueChange: {
+        type: ControlType.EventHandler,
+    },
     settings: {
         title: "Settings",
         type: ControlType.Object,
@@ -302,6 +347,11 @@ addPropertyControls(Combo_box, {
             },
             openOnClick: {
                 title: "Click Open",
+                type: ControlType.Boolean,
+                defaultValue: true,
+            },
+            loop: {
+                title: "Loop",
                 type: ControlType.Boolean,
                 defaultValue: true,
             },
@@ -518,8 +568,39 @@ addPropertyControls(Combo_box, {
             },
         },
     },
+    dataBy: {
+        title: "Populated By",
+        type: ControlType.Enum,
+        options: ["Auto", "File", "Manually"],
+        optionTitles: ["Auto", "File", "Manually"],
+        description: "Determines how data is populated",
+    },
+    dataFile: {
+        hidden: (props) => props.dataBy != "File",
+        title: "Data File",
+        type: ControlType.File,
+        allowedFileTypes: ["javascript", "CSV", "JSON"],
+    },
+    dataObject: {
+        hidden: (props) => props.dataBy != "Manually",
+        title: "Data Object",
+        type: ControlType.Array,
+        control: {
+            type: ControlType.Object,
+            controls: {
+                label: {
+                    title: "Label",
+                    type: ControlType.String,
+                },
+                value: {
+                    title: "Label",
+                    type: ControlType.String,
+                },
+            },
+        },
+    },
     items: {
-        title: "Items",
+        title: "Item Style",
         type: ControlType.Object,
         controls: {
             fontFamily: {
@@ -536,6 +617,11 @@ addPropertyControls(Combo_box, {
                 title: "Color",
                 type: ControlType.Color,
                 defaultValue: "#111111",
+            },
+            disabledColor: {
+                title: "Color Disabled",
+                type: ControlType.Color,
+                defaultValue: "#AAAAAA",
             },
             borderColor: {
                 title: "Border",
