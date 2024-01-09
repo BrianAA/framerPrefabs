@@ -28,12 +28,13 @@ const testData = [
  */
 export default function Combo_box(props) {
     const {
+        prefabValue,
         onExitComplete,
         onFocusOutside,
         onHighlightChange,
         onInputValueChange,
         onInteractOutside,
-        onOpenChange,
+        prefabOpen,
         onPointerDownOutside,
         onValueChange,
         settings,
@@ -51,54 +52,128 @@ export default function Combo_box(props) {
         clearSVG,
         indicatorSVG,
         style,
+        selectedValues,
         ...rest
     } = props
 
     const [options, setOptions] = useState(testData)
-    const [nodes, setNodeOptions] = useState([])
-    console.log(dataFile)
+    const [nodes, setNodes] = useState(null)
+    const [data, setData] = useState(null)
+    const [inputValue, setInputValue] = useState([])
+
+    const [test, setTestState] = useState(null)
     //Handles the initial set up of gathering all data-keys
     useEffect(() => {
-        if (dataBy == "Auto") {
-            const nodeList = document.querySelectorAll("[data-key]")
-            const stringValues = []
-            nodeList.forEach((element) => {
-                // Retrieve the value of 'data-key' attribute for each element
-                const dataKeyValue = element.getAttribute("data-key")
-                if (!stringValues.includes(dataKeyValue)) {
-                    stringValues.push(dataKeyValue)
-                }
-            })
-            if (stringValues.length != 0) {
-                setOptions(stringValues)
-            }
-            setNodeOptions(nodeList)
+        switch (dataBy) {
+            case "Auto":
+                setDataAuto()
+                break
+            case "File":
+                fetchSetData()
+                break
+            default:
+                setOptions(dataObject)
+                break
         }
     }, [])
 
-    //Handles value change updating the collection
-    function handleChange(details) {
-        const hasValue = details.value.length > 0
-        nodes.forEach((element) => {
-            const dataKeyValue = element.getAttribute("data-key")
+    function setDataAuto() {
+        const nodeList = document.querySelectorAll("[data-prefab-value]")
+        const _items = []
+        const refinedList = []
+        nodeList.forEach((element) => {
+            const dataKeyValue = element.getAttribute("data-prefab-value")
+            const dataKeyLabel = element.getAttribute("data-prefab-label")
             const dataControlID = element.getAttribute("data-prefab-control")
-            let parent = loopAndFindATag(element)
+            const _item = { label: dataKeyLabel, value: dataKeyLabel }
 
-            // Check if the parent element exists to avoid null reference errors
-            if (parent && dataControlID == settings.UID) {
-                if (hasValue) {
-                    // Check if data-key value is in the details.value array
-                    const isVisible = details.value.includes(dataKeyValue)
-
-                    // Toggle visibility based on the data-key match
-                    parent.style.display = isVisible ? "" : "none"
-                } else {
-                    // When there is no value, reset CSS styles
-                    console.log("resetting")
-                    parent.style.cssText = ""
-                }
+            // Check if the item is not already in the array
+            const isItemInArray = _items.some(
+                (item) =>
+                    item.label === _item.label && item.value === _item.value
+            )
+            if (!isItemInArray && dataControlID == settings.UID) {
+                _items.push(_item)
+            }
+            if (dataControlID == settings.UID) {
+                refinedList.push(element)
             }
         })
+
+        if (_items.length != 0) {
+            setOptions(_items)
+            setNodes(refinedList)
+        }
+    }
+
+    function fetchSetData() {
+        fetch(dataFile)
+            .then((response) => {
+                const contentType = response.headers.get("content-type")
+                if (contentType.includes("application/json")) {
+                    return response.json()
+                } else {
+                    return response.text()
+                }
+            })
+            .then((data) => {
+                if (typeof data === "string") {
+                    if (data.trim().startsWith("{")) {
+                        try {
+                            setData(JSON.parse(data))
+                        } catch (e) {
+                            // Handle JSON parse error
+                        }
+                    } else {
+                        // Handle CSV parsing
+                        const rows = data.split("\n")
+                        setData(rows.map((row) => row.split(",")))
+                    }
+                } else {
+                    setData(data) // JSON data
+                }
+            })
+            .catch((error) => console.error("Error fetching data:", error))
+    }
+
+    //Sets data manaully
+    function setDataManually() {
+        console.log(dataObject)
+    }
+    function handleValue() {
+        setInputValue(inputValue)
+    }
+    //Handles value change updating the collection
+    function handleChange(details) {
+        if (dataBy == "Auto") {
+            const hasValue = details.value.length > 0
+            nodes.forEach((element) => {
+                const dataKeyValue = element.getAttribute("data-prefab-label")
+                const dataControlID = element.getAttribute(
+                    "data-prefab-control"
+                )
+                let parent = loopAndFindATag(element)
+
+                // Check if the parent element exists to avoid null reference errors
+                if (parent && dataControlID == settings.UID) {
+                    if (hasValue) {
+                        // Check if data-key value is in the details.value array
+                        const isVisible = details.value.includes(dataKeyValue)
+
+                        // Toggle visibility based on the data-key match
+                        parent.style.display = isVisible ? "" : "none"
+                    } else {
+                        // When there is no value, reset CSS styles
+                        console.log("resetting")
+                        parent.style.cssText = ""
+                    }
+                }
+            })
+        }
+        if (prefabValue) {
+            prefabValue(details.value)
+        }
+        setInputValue(details.value)
     }
 
     //Loops and finds the Link Tag for CMS or any item that has a link
@@ -242,6 +317,12 @@ export default function Combo_box(props) {
         paddingRight: items.inputPaddingRight,
     })
 
+    function handleOpen(e) {
+        if (prefabOpen) {
+            prefabOpen(e)
+        }
+    }
+
     return (
         <Root
             placeholder={placeholder}
@@ -250,15 +331,10 @@ export default function Combo_box(props) {
             loop={settings.loop}
             items={options}
             selectOnBlur={false}
-            onFocusOutside={onFocusOutside}
-            onHighlightChange={onHighlightChange}
-            onInputValueChange={onInputValueChange}
-            onInteractOutside={onInputValueChange}
-            onOpenChange={onOpenChange}
-            onPointerDownOutside={onPointerDownOutside}
-            onValueChange={onValueChange}
+            onValueChange={handleChange}
             data-prefab-id={settings.UID}
             openOnClick={settings.openOnClick}
+            value={inputValue}
         >
             <ComboLabel inline={hideLabel}>{labelText}</ComboLabel>
             <Controls>
@@ -294,9 +370,9 @@ export default function Combo_box(props) {
                 <Combobox.Positioner>
                     <Content>
                         {options.map((item) => (
-                            <Item key={item} item={item}>
+                            <Item key={item.label} item={item.value}>
                                 <Combobox.ItemText style={{ width: "100%" }}>
-                                    {item}
+                                    {item.label}
                                 </Combobox.ItemText>
                                 <Indicator>
                                     {indicatorSVG && indicatorSVG[0] ? (
@@ -327,7 +403,7 @@ addPropertyControls(Combo_box, {
     onInteractOutside: {
         type: ControlType.EventHandler,
     },
-    onOpenChange: {
+    prefabOpen: {
         type: ControlType.EventHandler,
     },
     onPointerDownOutside: {
@@ -336,6 +412,10 @@ addPropertyControls(Combo_box, {
     onValueChange: {
         type: ControlType.EventHandler,
     },
+    prefabValue: {
+        type: ControlType.EventHandler,
+    },
+
     settings: {
         title: "Settings",
         type: ControlType.Object,
@@ -579,7 +659,7 @@ addPropertyControls(Combo_box, {
         hidden: (props) => props.dataBy != "File",
         title: "Data File",
         type: ControlType.File,
-        allowedFileTypes: ["javascript", "CSV", "JSON"],
+        allowedFileTypes: ["CSV", "JSON"],
     },
     dataObject: {
         hidden: (props) => props.dataBy != "Manually",
@@ -593,7 +673,7 @@ addPropertyControls(Combo_box, {
                     type: ControlType.String,
                 },
                 value: {
-                    title: "Label",
+                    title: "Value",
                     type: ControlType.String,
                 },
             },
