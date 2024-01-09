@@ -8,15 +8,14 @@ import { styled, css } from "@stitches/react"
 
 //Only Used for demonstration unless you want fruit data?
 const testData = [
-    "Apple",
-    "Banana",
-    "Cherry",
-    "Date",
-    "Elderberry",
-    "Fig",
-    "Grape",
-    "Honeydew",
-    "Indian Fig (Prickly Pear)",
+    { label: "Apple", value: "Apple" },
+    { label: "Banana", value: "Banana" },
+    { label: "Cherry", value: "Cherry" },
+    { label: "Date", value: "Date" },
+    { label: "Elderberry", value: "Elderberry" },
+    { label: "Fig", value: "Fig" },
+    { label: "Grape", value: "Grape" },
+    { label: "Honeydew", value: "Honeydew" },
 ]
 
 /**
@@ -29,14 +28,6 @@ const testData = [
 export default function Combo_box(props) {
     const {
         prefabValue,
-        onExitComplete,
-        onFocusOutside,
-        onHighlightChange,
-        onInputValueChange,
-        onInteractOutside,
-        prefabOpen,
-        onPointerDownOutside,
-        onValueChange,
         settings,
         hideLabel,
         labelText,
@@ -317,10 +308,8 @@ export default function Combo_box(props) {
         paddingRight: items.inputPaddingRight,
     })
 
-    function handleOpen(e) {
-        if (prefabOpen) {
-            prefabOpen(e)
-        }
+    function handleClear() {
+        setInputValue([])
     }
 
     return (
@@ -340,6 +329,7 @@ export default function Combo_box(props) {
             <Controls>
                 <Input aria-labelledby={labelText} />
                 <Combobox.ClearTrigger
+                    onClick={handleClear}
                     className={TriggerStyle({
                         native: clearSVG.length > 0,
                     })}
@@ -391,27 +381,6 @@ export default function Combo_box(props) {
 }
 
 addPropertyControls(Combo_box, {
-    onFocusOutside: {
-        type: ControlType.EventHandler,
-    },
-    onHighlightChange: {
-        type: ControlType.EventHandler,
-    },
-    onInputValueChange: {
-        type: ControlType.EventHandler,
-    },
-    onInteractOutside: {
-        type: ControlType.EventHandler,
-    },
-    prefabOpen: {
-        type: ControlType.EventHandler,
-    },
-    onPointerDownOutside: {
-        type: ControlType.EventHandler,
-    },
-    onValueChange: {
-        type: ControlType.EventHandler,
-    },
     prefabValue: {
         type: ControlType.EventHandler,
     },
