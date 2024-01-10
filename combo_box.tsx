@@ -47,7 +47,7 @@ export default function Combo_box(props) {
         ...rest
     } = props
 
-    const [options, setOptions] = useState(testData)
+    const [options, setOptions] = useState([])
     const [nodes, setNodes] = useState(null)
     const [data, setData] = useState(null)
     const [inputValue, setInputValue] = useState([])
@@ -63,7 +63,7 @@ export default function Combo_box(props) {
                 fetchSetData()
                 break
             default:
-                setOptions(dataObject)
+                setDataManually()
                 break
         }
     }, [])
@@ -130,9 +130,11 @@ export default function Combo_box(props) {
     //Sets data manaully
     function setDataManually() {
         console.log(dataObject)
-    }
-    function handleValue() {
-        setInputValue(inputValue)
+        if (dataObject.length > 0) {
+            setOptions(dataObject)
+        } else {
+            setOptions(testData)
+        }
     }
     //Handles value change updating the collection
     function handleChange(details) {
@@ -329,7 +331,7 @@ export default function Combo_box(props) {
             <Controls>
                 <Input aria-labelledby={labelText} />
                 <Combobox.ClearTrigger
-                    onClick={handleClear}
+                    hidden={inputValue.length == 0}
                     className={TriggerStyle({
                         native: clearSVG.length > 0,
                     })}
@@ -623,6 +625,7 @@ addPropertyControls(Combo_box, {
         options: ["Auto", "File", "Manually"],
         optionTitles: ["Auto", "File", "Manually"],
         description: "Determines how data is populated",
+        defaultValue: "Manually",
     },
     dataFile: {
         hidden: (props) => props.dataBy != "File",
