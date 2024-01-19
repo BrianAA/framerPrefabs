@@ -2,6 +2,7 @@ import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
 import React from "react"
 
+
 interface DissabledProps {
     opacity: number
     background: string
@@ -21,6 +22,15 @@ interface ControlStyleProps {
     focus: FocusProps
     radius: number
 }
+interface LabelStyleProps {
+    font: string,
+    size: number,
+    lineHeight: number,
+    color: string,
+    letterSpacing: number,
+    fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800,
+    labelPosition: number
+}
 
 interface ThumbStyleProps {
     inActive: string
@@ -30,9 +40,8 @@ interface ThumbStyleProps {
 interface SwitchPrefabProps {
     controlStyles: ControlStyleProps
     thumbStyles: ThumbStyleProps
-    labelStyles: Object
+    labelStyles: LabelStyleProps
     useLabel: boolean
-    labelPosition: boolean
     text: string
     disabled: boolean
     formID: string
@@ -59,7 +68,6 @@ export function SwitchPrefab({
     required,
     defaultChecked,
     useLabel,
-    labelPosition,
     name,
     controlID,
 }: SwitchPrefabProps) {
@@ -72,10 +80,14 @@ export function SwitchPrefab({
         display: "flex",
         gap: "8px",
         alignItems: "center",
+
     })
     const SwitchLabel = css({
-        fontFamily: "sans-serif",
-        fontSize: "14px",
+        fontFamily: labelStyles.font ? labelStyles.font : "sans-serif",
+        fontWeight: labelStyles.fontWeight ? labelStyles.fontWeight : "300",
+        fontSize: labelStyles.size ? labelStyles.size : "14px",
+        color: labelStyles.color ? labelStyles.color : "#666666",
+        order: labelStyles.labelPosition ? labelStyles.labelPosition : 0
     })
     const SwitchRoot = css({
         all: "unset",
@@ -134,7 +146,7 @@ export function SwitchPrefab({
                 <label
                     className={SwitchLabel()}
                     htmlFor={controlID}
-                    style={{ ...labelStyles, order: labelPosition ? 1 : 0 }}
+                    style={{ ...labelStyles }}
                 >
                     {text ? text : "Label"}
                 </label>
