@@ -83,9 +83,9 @@ export function SwitchPrefab({
 
     })
     const SwitchLabel = css({
-        fontFamily: labelStyles.font ? labelStyles.font : "sans-serif",
+        fontFamily: labelStyles.font ? `${labelStyles.font}` : "sans-serif",
         fontWeight: labelStyles.fontWeight ? labelStyles.fontWeight : "300",
-        fontSize: labelStyles.size ? labelStyles.size : "14px",
+        fontSize: labelStyles.size ? labelStyles.size + "px" : "14px",
         color: labelStyles.color ? labelStyles.color : "#666666",
         order: labelStyles.labelPosition ? labelStyles.labelPosition : 0
     })
