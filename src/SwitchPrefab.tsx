@@ -141,6 +141,7 @@ export function SwitchPrefab({
         const customEventData = { value: e };
         const event = new CustomEvent('SwitchPrefab', { detail: customEventData });
         document.dispatchEvent(event);
+        console.log("event" + event)
     };
 
     return (
