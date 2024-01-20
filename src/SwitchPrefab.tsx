@@ -72,9 +72,7 @@ export function SwitchPrefab({
     controlID,
 }: SwitchPrefabProps) {
 
-    function handleChange(e: boolean) {
-        console.log(e)
-    }
+
 
     const SwitchContainer = styled("div", {
         display: "flex",
@@ -139,6 +137,11 @@ export function SwitchPrefab({
         },
     })
 
+    const onValueChange = (e: boolean) => {
+        const customEventData = { value: e };
+        const event = new CustomEvent('SwitchPrefab', { detail: customEventData });
+        document.dispatchEvent(event);
+    };
 
     return (
         <SwitchContainer>
@@ -157,7 +160,7 @@ export function SwitchPrefab({
                 defaultChecked={defaultChecked}
                 required={required}
                 disabled={disabled}
-                onCheckedChange={handleChange}
+                onCheckedChange={onValueChange}
                 name={name}
                 id={controlID}
             >
