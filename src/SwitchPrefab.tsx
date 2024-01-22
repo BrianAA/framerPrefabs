@@ -38,7 +38,6 @@ interface ThumbStyleProps {
     disabled: DissabledProps
 }
 interface SwitchPrefabProps {
-    style: React.CSSProperties
     controlStyles: ControlStyleProps
     thumbStyles: ThumbStyleProps
     labelStyles: LabelStyleProps
@@ -60,7 +59,6 @@ interface SwitchPrefabProps {
  * @framerSupportedLayoutHeight auto
  */
 export function SwitchPrefab({
-    style,
     controlStyles,
     thumbStyles,
     labelStyles,
@@ -158,7 +156,6 @@ export function SwitchPrefab({
                 </label>
             )}
             <Switch.Root
-                style={style}
                 className={SwitchRoot()}
                 form={formID}
                 defaultChecked={defaultChecked}
