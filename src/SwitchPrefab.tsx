@@ -181,10 +181,7 @@ export function SwitchPrefab({
                     className={SwitchLabel()}
                     htmlFor={controlID}
                 >
-                    {/* If there is a native label use that other wise provide a label */}
-                    {nativeLabel && nativeLabel[0] ?
-                        nativeLabel : text ? text : "Label"
-                    }
+                    {text ? text : "Label"}
                 </label>
             )}
             <Switch.Root
