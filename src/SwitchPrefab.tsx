@@ -83,7 +83,6 @@ export function SwitchPrefab({
     name,
     controlID,
 }: SwitchPrefabProps) {
-    const [controlState, setControlState] = useState(false);
 
 
     const SwitchContainer = styled("div", {
@@ -132,7 +131,9 @@ export function SwitchPrefab({
     })
 
     const SwitchThumb = styled(Switch.Thumb, {
-        display: "block",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         width: controlStyles ? `${controlStyles.height}px` : 16,
         height: controlStyles ? `${controlStyles.height}px` : 16,
         backgroundColor: thumbStyles ? `${thumbStyles.inActive}` : "white",
@@ -148,16 +149,28 @@ export function SwitchPrefab({
         '&[data-state="checked"]': {
             backgroundColor: thumbStyles ? thumbStyles.active : "",
             transform: `translateX(${controlStyles.height}px)`,
+            "& .inactive-icon": {
+                display: "none"
+            },
+            "& .active-icon": {
+                display: "block"
+            }
+        },
+        '&[data-state="unchecked"]': {
+            "& .inactive-icon": {
+                display: "block"
+            },
+            "& .active-icon": {
+                display: "none"
+            }
         },
     })
 
+
     const onValueChange = (e: boolean) => {
         const customEventData = { value: e };
-        setControlState(e);
         const event = new CustomEvent('SwitchPrefab', { detail: customEventData });
         document.dispatchEvent(event);
-
-        //TODO delete event
         console.log("event" + event)
     };
 
@@ -183,8 +196,12 @@ export function SwitchPrefab({
                 id={controlID}
             >
                 <SwitchThumb>
-                    {iconOff && !controlState && iconOff}
-                    {iconOn && controlState && iconOn}
+                    <span className="active-icon">
+                        {iconOff && iconOn}
+                    </span>
+                    <span className="inactive-icon">
+                        {iconOff && iconOff}
+                    </span>
                 </SwitchThumb>
             </Switch.Root>
         </SwitchContainer>
