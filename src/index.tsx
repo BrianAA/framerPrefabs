@@ -2,4 +2,3 @@ export { propText, propShadow_light, propFocus, propDisabled, propPositionX, pro
 export { theme, palette, sizes } from "./theme";
 export { SwitchPrefab } from "./SwitchPrefab";
 export { SwitchProperties } from "./SwitchPrefab_PropControls";
-

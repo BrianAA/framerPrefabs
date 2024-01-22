@@ -169,13 +169,13 @@ export const palette = {
 }
 
 export const sizes = {
-    50: "9px",
-    100: "12px",
-    200: "16px",
-    300: "21px",
-    400: "28px",
-    500: "38px",
-    600: "51px",
+    50: 9,
+    100: 12,
+    200: 16,
+    300: 21,
+    400: 28,
+    500: 38,
+    600: 51,
 }
 
 export const theme = {
@@ -221,8 +221,8 @@ export const theme = {
         }
     },
     radius: {
-        default: "4px",
-        round: "9999px"
+        default: 4,
+        round: 9999
     },
     focus: {
         offset: "2px",

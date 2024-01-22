@@ -90,44 +90,40 @@ export const propShadow_light = {
 }
 
 export const propFocus = {
-    focus: {
-        title: "Focus",
-        type: ControlType.Object,
-        controls: {
-            offset: {
-                title: "Offset",
-                type: ControlType.Number,
-                defaultValue: 2,
-            },
-            color: {
-                title: "Color",
-                type: ControlType.Color,
-                defaultValue: theme.colors.signal,
-            },
-            style: {
-                title: "Style",
-                type: ControlType.Enum,
-                options: ["solid", "none"],
-                optionTitles: ["Solid", "None"],
-            },
+    title: "Focus",
+    type: ControlType.Object,
+    controls: {
+        offset: {
+            title: "Offset",
+            type: ControlType.Number,
+            defaultValue: 2,
         },
-    }
+        color: {
+            title: "Color",
+            type: ControlType.Color,
+            defaultValue: theme.colors.signal,
+        },
+        style: {
+            title: "Style",
+            type: ControlType.Enum,
+            options: ["solid", "none"],
+            optionTitles: ["Solid", "None"],
+        },
+    },
 }
 export const propDisabled = {
-    disabled: {
-        title: "Disabled",
-        type: ControlType.Object,
-        controls: {
-            opacity: {
-                title: "Opacity",
-                type: ControlType.Number,
-                defaultValue: 1,
-            },
-            color: {
-                title: "Color",
-                type: ControlType.Color,
-                defaultValue: theme.colors.disabled,
-            },
+    title: "Disabled",
+    type: ControlType.Object,
+    controls: {
+        opacity: {
+            title: "Opacity",
+            type: ControlType.Number,
+            defaultValue: 1,
+        },
+        color: {
+            title: "Color",
+            type: ControlType.Color,
+            defaultValue: theme.colors.disabled,
         },
     },
 }

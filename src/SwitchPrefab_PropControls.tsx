@@ -61,8 +61,8 @@ export const SwitchProperties = {
                 defaultValue: theme.radius.round
             },
             disabled: { ...propDisabled },
+            focus: { ...propFocus },
         },
-        focus: { ...propFocus },
     },
 
     thumbStyles: {
@@ -79,8 +79,9 @@ export const SwitchProperties = {
                 type: ControlType.Color,
                 defaultValue: palette.colors.white,
             },
-            shadow: { ...propShadow_light },
             disabled: { ...propDisabled },
+            shadow: { ...propShadow_light },
+
         },
     },
 }

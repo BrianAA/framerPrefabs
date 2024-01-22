@@ -1,7 +1,7 @@
 import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
 import React from "react"
-interface DissabledProps {
+interface DisabledProps {
     opacity: number
     color: string
 }
@@ -16,7 +16,7 @@ interface ControlStyleProps {
     width: number
     inActive: string
     active: string
-    disabled: DissabledProps
+    disabled: DisabledProps
     focus: FocusProps
     radius: number
 }
@@ -40,7 +40,7 @@ interface ShadowProps {
 interface ThumbStyleProps {
     inActive: string
     active: string
-    disabled: DissabledProps,
+    disabled: DisabledProps
     shadow: ShadowProps
 }
 interface SwitchPrefabProps {
