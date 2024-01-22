@@ -109,7 +109,7 @@ export function SwitchPrefab({
             outlineColor: controlStyles
                 ? `${controlStyles.focus.color}`
                 : "#282A2C",
-            outlineStyle: controlStyles ? "none" : "solid",
+            outlineStyle: controlStyles.focus.style ? controlStyles.focus.style : "solid",
         },
         '&[data-state="checked"]': {
             backgroundColor: controlStyles
@@ -133,7 +133,7 @@ export function SwitchPrefab({
         },
         '&[data-state="checked"]': {
             backgroundColor: thumbStyles ? thumbStyles.active : "",
-            transform: "translateX(18px)",
+            transform: `translateX(${controlStyles.height}px)`,
         },
     })
 
