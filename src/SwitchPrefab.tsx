@@ -5,7 +5,7 @@ import React from "react"
 
 interface DissabledProps {
     opacity: number
-    background: string
+    color: string
 }
 
 interface FocusProps {
@@ -38,6 +38,7 @@ interface ThumbStyleProps {
     disabled: DissabledProps
 }
 interface SwitchPrefabProps {
+    style: React.CSSProperties
     controlStyles: ControlStyleProps
     thumbStyles: ThumbStyleProps
     labelStyles: LabelStyleProps
@@ -59,6 +60,7 @@ interface SwitchPrefabProps {
  * @framerSupportedLayoutHeight auto
  */
 export function SwitchPrefab({
+    style,
     controlStyles,
     thumbStyles,
     labelStyles,
@@ -99,7 +101,7 @@ export function SwitchPrefab({
         "&:disabled": {
             opacity: controlStyles ? controlStyles.disabled.opacity : 0.5,
             backgroundColor: controlStyles
-                ? `${controlStyles.disabled.background}`
+                ? `${controlStyles.disabled.color}`
                 : "",
         },
         "&:focus": {
@@ -129,7 +131,7 @@ export function SwitchPrefab({
         willChange: "transform",
         "&[data-disabled]": {
             opacity: thumbStyles ? thumbStyles.disabled.opacity : 0.5,
-            background: thumbStyles ? thumbStyles.disabled.background : "",
+            background: thumbStyles ? thumbStyles.disabled.color : "",
         },
         '&[data-state="checked"]': {
             backgroundColor: thumbStyles ? thumbStyles.active : "",
@@ -156,6 +158,7 @@ export function SwitchPrefab({
                 </label>
             )}
             <Switch.Root
+                style={style}
                 className={SwitchRoot()}
                 form={formID}
                 defaultChecked={defaultChecked}
