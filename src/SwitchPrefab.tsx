@@ -2,7 +2,6 @@ import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
 import React, { useState } from "react"
 
-
 interface DissabledProps {
     opacity: number
     color: string
