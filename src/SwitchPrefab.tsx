@@ -148,7 +148,7 @@ export function SwitchPrefab({
         },
         '&[data-state="checked"]': {
             backgroundColor: thumbStyles ? thumbStyles.active : "",
-            transform: `translateX(${controlStyles.height}px)`,
+            transform: `translateX(${controlStyles.width - controlStyles.height}px)`,
             "& .inactive-icon": {
                 display: "none"
             },
