@@ -12,6 +12,7 @@ export const palette = {
             400: "#ced4da",
             500: "#adb5bd",
             600: "#868e96",
+            650: "#54595E",
             700: "#495057",
             800: "#343a40",
             900: "#212529",
@@ -179,6 +180,9 @@ export const sizes = {
 
 export const theme = {
     colors: {
+        background: palette.colors.gray[50],
+        onBackground: palette.colors.gray[900],
+        onBackground_subtle: palette.colors.gray[650],
         primary: palette.colors.gray[900],
         primary_hover: palette.colors.gray[700],
         onPrimary: palette.colors.gray[50],
@@ -208,11 +212,17 @@ export const theme = {
         xl: sizes[400]
     },
     text: {
-        font: "inter",
-        boldWeight: "500",
-        defaultWeight: "300",
-        lineHeight: 1.1,
-        letterSpacing: 0.12,
+        meta: {
+            font: "inter",
+            boldWeight: "500",
+            defaultWeight: "300",
+            lineHeight: 1.1,
+            letterSpacing: 0.12,
+        }
+    },
+    radius: {
+        default: "4px",
+        round: "9999px"
     },
     focus: {
         offset: "2px",

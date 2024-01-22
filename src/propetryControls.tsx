@@ -1,21 +1,22 @@
 import { ControlType } from "framer";
 import { theme, palette } from "./theme";
 
-export const text = {
+
+export const propText = {
     font: {
         title: "Font",
         type: ControlType.String,
-        defaultValue: "Inter",
+        defaultValue: theme.text.meta.font,
     },
     size: {
         title: "Size",
         type: ControlType.Number,
-        defaultValue: "14",
+        defaultValue: theme.fontSize.sm,
     },
     letterSpacing: {
         title: "Spacing",
         type: ControlType.Number,
-        defaultValue: "0",
+        defaultValue: theme.text.meta.letterSpacing,
     },
     fontWeight: {
         title: "Weight",
@@ -42,21 +43,21 @@ export const text = {
             "Extra Bold",
             "Black",
         ],
-        defaultValue: "500",
+        defaultValue: theme.text.meta.boldWeight,
     },
     lineHeight: {
         title: "Line-Height",
         type: ControlType.Number,
-        defaultValue: "1.1",
+        defaultValue: theme.text.meta.lineHeight,
     },
     color: {
         title: "Color",
         type: ControlType.Color,
-        defaultValue: "#666666",
+        defaultValue: theme.colors.onBackground,
     },
 }
 
-export const shadowLight = {
+export const propShadow_light = {
     title: "Shadow",
     type: ControlType.Object,
     controls: {
@@ -88,13 +89,65 @@ export const shadowLight = {
     }
 }
 
-export const width = {
-    title: "Width",
-    type: ControlType.Number,
+export const propFocus = {
+    focus: {
+        title: "Focus",
+        type: ControlType.Object,
+        controls: {
+            offset: {
+                title: "Offset",
+                type: ControlType.Number,
+                defaultValue: 2,
+            },
+            color: {
+                title: "Color",
+                type: ControlType.Color,
+                defaultValue: theme.colors.signal,
+            },
+            style: {
+                title: "Style",
+                type: ControlType.Enum,
+                options: ["solid", "none"],
+                optionTitles: ["Solid", "None"],
+            },
+        },
+    }
 }
-export const height = {
-    title: "Height",
-    type: ControlType.Number,
+export const propDisabled = {
+    disabled: {
+        title: "Disabled",
+        type: ControlType.Object,
+        controls: {
+            opacity: {
+                title: "Opacity",
+                type: ControlType.Number,
+                defaultValue: 1,
+            },
+            color: {
+                title: "Color",
+                type: ControlType.Color,
+                defaultValue: theme.colors.disabled,
+            },
+        },
+    },
+}
+
+export const propPositionX = {
+    positionX: {
+        title: "Position",
+        type: ControlType.Enum,
+        options: [0, 1],
+        optionTitles: ["Left", "Right"],
+    }
+}
+
+export const propPositionY = {
+    positionX: {
+        title: "Position",
+        type: ControlType.Enum,
+        options: [0, 1],
+        optionTitles: ["Top", "Bottom"],
+    }
 }
 
 export const SharedControlProps = {

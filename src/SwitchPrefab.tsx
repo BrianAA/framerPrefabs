@@ -1,7 +1,6 @@
 import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
 import React from "react"
-
 interface DissabledProps {
     opacity: number
     color: string
@@ -28,7 +27,7 @@ interface LabelStyleProps {
     color: string,
     letterSpacing: number,
     fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800,
-    labelPosition: number
+    position: number
 }
 
 interface ShadowProps {
@@ -97,7 +96,7 @@ export function SwitchPrefab({
         fontWeight: labelStyles.fontWeight ? labelStyles.fontWeight : "300",
         fontSize: labelStyles.size ? labelStyles.size + "px" : "14px",
         color: labelStyles.color ? labelStyles.color : "#666666",
-        order: labelStyles.labelPosition ? labelStyles.labelPosition : 0
+        order: labelStyles.position ? labelStyles.position : 0
     })
     const SwitchRoot = css({
         all: "unset",
@@ -181,7 +180,6 @@ export function SwitchPrefab({
                 <label
                     className={SwitchLabel()}
                     htmlFor={controlID}
-                    style={{ ...labelStyles }}
                 >
                     {/* If there is a native label use that other wise provide a label */}
                     {nativeLabel && nativeLabel[0] ?
