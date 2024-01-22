@@ -1,6 +1,6 @@
 import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
-import React from "react"
+import React, { useState } from "react"
 
 
 interface DissabledProps {
@@ -46,6 +46,8 @@ interface ThumbStyleProps {
     shadow: ShadowProps
 }
 interface SwitchPrefabProps {
+    iconOff: any
+    iconOn: any
     controlStyles: ControlStyleProps
     thumbStyles: ThumbStyleProps
     labelStyles: LabelStyleProps
@@ -67,6 +69,8 @@ interface SwitchPrefabProps {
  * @framerSupportedLayoutHeight auto
  */
 export function SwitchPrefab({
+    iconOff,
+    iconOn,
     controlStyles,
     thumbStyles,
     labelStyles,
@@ -79,7 +83,7 @@ export function SwitchPrefab({
     name,
     controlID,
 }: SwitchPrefabProps) {
-
+    const [controlState, setControlState] = useState(false);
 
 
     const SwitchContainer = styled("div", {
@@ -149,8 +153,11 @@ export function SwitchPrefab({
 
     const onValueChange = (e: boolean) => {
         const customEventData = { value: e };
+        setControlState(e);
         const event = new CustomEvent('SwitchPrefab', { detail: customEventData });
         document.dispatchEvent(event);
+
+        //TODO delete event
         console.log("event" + event)
     };
 
@@ -175,7 +182,10 @@ export function SwitchPrefab({
                 name={name}
                 id={controlID}
             >
-                <SwitchThumb />
+                <SwitchThumb>
+                    {iconOff && !controlState && iconOff}
+                    {iconOn && controlState && iconOn}
+                </SwitchThumb>
             </Switch.Root>
         </SwitchContainer>
     )
