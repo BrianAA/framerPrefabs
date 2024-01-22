@@ -1,6 +1,7 @@
 import { addPropertyControls, ControlType } from "framer"
+import React from "react"
 // import { SwitchPrefab } from "https://www.thoughttolife.com/framerPrefabs/framerprefabs@0.0.14/index.js?1234"
-import { SwitchPrefab } from "http://127.0.0.1:8000/index.js"
+
 /**
  * These annotations control how your component sizes
  * Learn more: https://www.framer.com/developers/#code-components-auto-sizing
@@ -8,16 +9,10 @@ import { SwitchPrefab } from "http://127.0.0.1:8000/index.js"
  * @framerSupportedLayoutWidth auto
  * @framerSupportedLayoutHeight auto
  */
-export default function Switch(props) {
-    const { text, controlStyles, thumbStyles, useLabel, labelStyles } = props
+export default function Switch() {
+
     return (
-        <SwitchPrefab
-            labelStyles={labelStyles}
-            thumbStyles={thumbStyles}
-            controlStyles={controlStyles}
-            useLabel={useLabel}
-            text={text}
-        />
+        <div>Component will go here</div>
     )
 }
 

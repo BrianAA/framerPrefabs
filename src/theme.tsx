@@ -1,3 +1,5 @@
+import { Size } from "framer/build/render/types/Size"
+
 export const palette = {
     colors: {
         white: "#ffffff",
@@ -165,25 +167,56 @@ export const palette = {
     },
 }
 
+export const sizes = {
+    50: "9px",
+    100: "12px",
+    200: "16px",
+    300: "21px",
+    400: "28px",
+    500: "38px",
+    600: "51px",
+}
+
 export const theme = {
-    primary: palette.colors.gray[900],
-    primary_hover: palette.colors.gray[700],
-    onPrimary: palette.colors.gray[50],
-    onPrimary_Hover: palette.colors.gray[200],
-    secondary: palette.colors.gray[100],
-    secondaryHover: palette.colors.gray[300],
-    onSecondary: palette.colors.gray[900],
-    onSecondary_Hover: palette.colors.gray[700],
-    outline: palette.colors.alpha[100],
-    outline_subtle: palette.colors.alpha[50],
-    error: palette.colors.red[500],
-    errorContainer: palette.colors.red[100],
-    signal: palette.colors.indigo[500],
-    signalContainer: palette.colors.indigo[100],
-    success: palette.colors.green[500],
-    successContainer: palette.colors.green[100],
-    warning: palette.colors.orange[500],
-    warningContainer: palette.colors.orange[100],
-    disabled: palette.colors.alpha[100],
-    onDisabled: palette.colors.alpha[50],
+    colors: {
+        primary: palette.colors.gray[900],
+        primary_hover: palette.colors.gray[700],
+        onPrimary: palette.colors.gray[50],
+        onPrimary_Hover: palette.colors.gray[200],
+        secondary: palette.colors.gray[100],
+        secondaryHover: palette.colors.gray[300],
+        onSecondary: palette.colors.gray[900],
+        onSecondary_Hover: palette.colors.gray[700],
+        outline: palette.colors.alpha[100],
+        outline_subtle: palette.colors.alpha[50],
+        error: palette.colors.red[500],
+        errorContainer: palette.colors.red[100],
+        signal: palette.colors.indigo[500],
+        signalContainer: palette.colors.indigo[100],
+        success: palette.colors.green[500],
+        successContainer: palette.colors.green[100],
+        warning: palette.colors.orange[500],
+        warningContainer: palette.colors.orange[100],
+        disabled: palette.colors.alpha[100],
+        onDisabled: palette.colors.alpha[50],
+    },
+    fontSize: {
+        xs: sizes[50],
+        sm: sizes[100],
+        md: sizes[200],
+        lg: sizes[300],
+        xl: sizes[400]
+    },
+    text: {
+        font: "inter",
+        boldWeight: "500",
+        defaultWeight: "300",
+        lineHeight: 1.1,
+        letterSpacing: 0.12,
+    },
+    focus: {
+        offset: "2px",
+        style: "solid",
+    },
+    inputHeight: sizes[400]
 }

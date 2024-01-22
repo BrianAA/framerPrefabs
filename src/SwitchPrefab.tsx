@@ -1,6 +1,6 @@
 import * as Switch from "@radix-ui/react-switch"
 import { styled, css } from "@stitches/react"
-import React, { useState } from "react"
+import React from "react"
 
 interface DissabledProps {
     opacity: number
@@ -47,6 +47,7 @@ interface ThumbStyleProps {
 interface SwitchPrefabProps {
     iconOff: any
     iconOn: any
+    nativeLabel: any
     controlStyles: ControlStyleProps
     thumbStyles: ThumbStyleProps
     labelStyles: LabelStyleProps
@@ -70,6 +71,7 @@ interface SwitchPrefabProps {
 export function SwitchPrefab({
     iconOff,
     iconOn,
+    nativeLabel,
     controlStyles,
     thumbStyles,
     labelStyles,
@@ -181,7 +183,10 @@ export function SwitchPrefab({
                     htmlFor={controlID}
                     style={{ ...labelStyles }}
                 >
-                    {text ? text : "Label"}
+                    {/* If there is a native label use that other wise provide a label */}
+                    {nativeLabel && nativeLabel[0] ?
+                        nativeLabel : text ? text : "Label"
+                    }
                 </label>
             )}
             <Switch.Root
