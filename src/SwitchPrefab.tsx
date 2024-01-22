@@ -32,10 +32,18 @@ interface LabelStyleProps {
     labelPosition: number
 }
 
+interface ShadowProps {
+    shadowX: number,
+    shadowY: number,
+    blur: number,
+    spread: number,
+    color: string
+}
 interface ThumbStyleProps {
     inActive: string
     active: string
-    disabled: DissabledProps
+    disabled: DissabledProps,
+    shadow: ShadowProps
 }
 interface SwitchPrefabProps {
     controlStyles: ControlStyleProps
@@ -89,8 +97,9 @@ export function SwitchPrefab({
     })
     const SwitchRoot = css({
         all: "unset",
-        width: controlStyles ? `${controlStyles.width}px` : 40,
-        height: controlStyles ? `${controlStyles.height}px` : 22,
+        width: controlStyles ? `${controlStyles.width}px` : 32,
+        height: controlStyles ? `${controlStyles.height}px` : 16,
+        padding: 2,
         backgroundColor: controlStyles
             ? `${controlStyles.inActive}`
             : "#EBEBEB",
@@ -120,13 +129,14 @@ export function SwitchPrefab({
 
     const SwitchThumb = styled(Switch.Thumb, {
         display: "block",
-        width: controlStyles ? `${controlStyles.height - 2}px` : 20,
-        height: controlStyles ? `${controlStyles.height - 2}px` : 20,
+        width: controlStyles ? `${controlStyles.height}px` : 16,
+        height: controlStyles ? `${controlStyles.height}px` : 16,
         backgroundColor: thumbStyles ? `${thumbStyles.inActive}` : "white",
-        borderRadius: "9999px",
+        borderRadius: controlStyles ? `${controlStyles.radius}px` : "9999px",
         transition: "transform 200ms",
-        transform: "translateX(2px)",
+        transform: "translateX(0px)",
         willChange: "transform",
+        boxShadow: `${thumbStyles.shadow.shadowX}px ${thumbStyles.shadow.shadowY}px ${thumbStyles.shadow.blur}px ${thumbStyles.shadow.spread} ${thumbStyles.shadow.color}`,
         "&[data-disabled]": {
             opacity: thumbStyles ? thumbStyles.disabled.opacity : 0.5,
             background: thumbStyles ? thumbStyles.disabled.color : "",
