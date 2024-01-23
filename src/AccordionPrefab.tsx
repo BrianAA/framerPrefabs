@@ -101,7 +101,7 @@ export function AccordionPrefab({ simple, items, trigger, content, style }) {
                                 })}
                             </Accordion.Trigger>
                         </Accordion.Header>
-                        <Accordion.Content>{item.content}</Accordion.Content>
+                        <Accordion.Content>Content goes here</Accordion.Content>
                     </Accordion.Item>)
                 })
             }
