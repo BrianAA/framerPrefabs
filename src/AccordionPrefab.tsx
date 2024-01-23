@@ -57,7 +57,7 @@ export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
         setNewProps(_UpdatedProps);
     }, [items, trigger, content, useFramer]);
 
-    const basicStyle = css({ width: 300, height: 60 })
+    const basicStyle = css({ width: "100%", height: 60 })
     //For Simple Accordion Items
     const SimpleAccordionItems = () => {
         if (items.length == 0) {
