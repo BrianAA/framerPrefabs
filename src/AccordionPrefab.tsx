@@ -55,9 +55,9 @@ export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
             }
         }
         setNewProps(_UpdatedProps);
-    }, [items, trigger, content, simple]);
+    }, [items, trigger, content, useFramer]);
 
-    const basicStyle = css({ width: 300, height: 60 })
+    const basicStyle = css({ height: 60 })
     //For Simple Accordion Items
     const SimpleAccordionItems = () => {
         if (items.length == 0) {
@@ -93,7 +93,7 @@ export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
                         key={i}
                     >
                         <Accordion.Header className={css({ padding: 0, margin: 0 })}>
-                            <Accordion.Trigger className={basicStyle()}>
+                            <Accordion.Trigger className={css({ width: "100%" })}>
                                 {React.cloneElement(trigger[0], {
                                     ..._prop,
                                     style: { width: "100%" },
