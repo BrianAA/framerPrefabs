@@ -13,6 +13,10 @@ import { cloneDeep } from 'lodash';
  */
 export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
     const [newProps, setNewProps] = useState([]);
+    const AccordionTrigger = styled(Accordion.Trigger, {
+        backgroundColor: "transparent",
+        border: "none",
+    })
     function findPrefabProperty(obj, titleToFind) {
         for (let key in obj) {
             const title = obj[key]?.title
@@ -70,9 +74,9 @@ export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
                 key={i}
             >
                 <Accordion.Header className={css({ padding: 0, margin: 0 })}>
-                    <Accordion.Trigger className={basicStyle()}>
+                    <AccordionTrigger className={basicStyle()}>
                         {item.header}
-                    </Accordion.Trigger>
+                    </AccordionTrigger>
                 </Accordion.Header>
                 <Accordion.Content>{item.content}</Accordion.Content>
             </Accordion.Item>
@@ -93,13 +97,13 @@ export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
                         key={i}
                     >
                         <Accordion.Header className={css({ padding: 0, margin: 0 })}>
-                            <Accordion.Trigger className={css({ width: "100%" })}>
+                            <AccordionTrigger className={css({ width: "100%" })}>
                                 {React.cloneElement(trigger[0], {
                                     ..._prop,
                                     style: { width: "100%" },
                                     className: ""
                                 })}
-                            </Accordion.Trigger>
+                            </AccordionTrigger>
                         </Accordion.Header>
                         <Accordion.Content>Content goes here</Accordion.Content>
                     </Accordion.Item>)
