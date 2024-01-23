@@ -55,7 +55,7 @@ export function AccordionPrefab({ simple, items, trigger, content, style }) {
             }
         }
         setNewProps(_UpdatedProps);
-    }, [items, trigger]);
+    }, [items, trigger, content, simple]);
 
     const basicStyle = css({ width: 300, height: 60 })
     //For Simple Accordion Items
@@ -85,53 +85,31 @@ export function AccordionPrefab({ simple, items, trigger, content, style }) {
             className={css({ padding: 0, margin: 0, "& h3": { margin: 0 } })}
             collapsible
         >
-            {
+            {!simple &&
                 newProps.map((_prop, i) => {
-                    return React.cloneElement(trigger[0], {
-                        ..._prop,
-                        style: { width: "100%" },
-                        className: ""
-                    })
+                    return (<Accordion.Item
+                        className={css({ padding: 0, margin: 0 })}
+                        value={`item-${i}`}
+                        key={i}
+                    >
+                        <Accordion.Header className={css({ padding: 0, margin: 0 })}>
+                            <Accordion.Trigger className={basicStyle()}>
+                                {React.cloneElement(trigger[0], {
+                                    ..._prop,
+                                    style: { width: "100%" },
+                                    className: ""
+                                })}
+                            </Accordion.Trigger>
+                        </Accordion.Header>
+                        <Accordion.Content>{item.content}</Accordion.Content>
+                    </Accordion.Item>)
                 })
+            }
+            {simple &&
+                <SimpleAccordionItems />
             }
         </Accordion.Root>
     )
 }
 
-addPropertyControls(AccordionPrefab, {
-    simple: {
-        title: "🅵-Custom",
-        type: ControlType.Boolean,
-        defaultValue: true,
-    },
-    items: {
-        title: "Items",
-        type: ControlType.Array,
-        control: {
-            type: ControlType.Object,
-            controls: {
-                header: {
-                    title: "Header",
-                    type: ControlType.String,
-                },
-                content: {
-                    title: "content",
-                    type: ControlType.String,
-                    displayTextArea: true,
-                },
-            },
-        },
-    },
-    trigger: {
-        hidden: (props) => !props.simple,
-        title: "Trigger",
-        description: "Connect a component with a text property $-Header",
-        type: ControlType.ComponentInstance,
-    },
-    content: {
-        hidden: (props) => !props.simple,
-        title: "Content",
-        description: "Connect a component with a text property $-Content",
-        type: ControlType.ComponentInstance,
-    },
-})
+
