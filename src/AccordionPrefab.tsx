@@ -11,7 +11,7 @@ import { cloneDeep } from 'lodash';
  * @framerSupportedLayoutWidth 200
  * @framerSupportedLayoutHeight 100
  */
-export function AccordionPrefab({ simple, items, trigger, content, style }) {
+export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
     const [newProps, setNewProps] = useState([]);
     function findPrefabProperty(obj, titleToFind) {
         for (let key in obj) {
@@ -85,7 +85,7 @@ export function AccordionPrefab({ simple, items, trigger, content, style }) {
             className={css({ padding: 0, margin: 0, "& h3": { margin: 0 } })}
             collapsible
         >
-            {!simple &&
+            {useFramer &&
                 newProps.map((_prop, i) => {
                     return (<Accordion.Item
                         className={css({ padding: 0, margin: 0 })}
@@ -105,7 +105,7 @@ export function AccordionPrefab({ simple, items, trigger, content, style }) {
                     </Accordion.Item>)
                 })
             }
-            {simple &&
+            {!useFramer &&
                 <SimpleAccordionItems />
             }
         </Accordion.Root>
