@@ -1,3 +1,4 @@
+Listen for builds here :`https://www.thoughttolife.com/framerPrefabs/framerprefabs@0.0.01/index.js` replace `package` before the index
 # Framer ESM Example Setup
 
 This is an example how to set up a repository that builds code which can be consumed in Framer. It builds standard JavaScript into ES Modules that you can both use locally for development or to deploy to any http server for distribution across your team or the internet.
