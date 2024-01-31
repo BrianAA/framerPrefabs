@@ -30,8 +30,8 @@ const displayVariants = {
  * @framerSupportedLayoutHeight auto
  */
 export function AccordionPrefab(props: any) {
-    const { style,
-        items = [],
+    const {
+        items,
         activeItem,
         useDefaultIcon,
         icons,
@@ -119,8 +119,8 @@ export function AccordionPrefab(props: any) {
             collapsible
             value={currentItem}
         >
-            {items.length > 0 && items.map((item, i) => {
-                <Accordion.Item key={uuidv4()} value={`item- ${i}`}>
+            {items.length > 0 ? items.map((item, i) => {
+                return (<Accordion.Item key={uuidv4()} value={`item-${i}`}>
                     <Accordion.Header>
                         <Accordion.Trigger style={headerStyleVariables} className={styles.triggerStyle}>
                             <span className={styles.headerText}>{item.header}</span>
@@ -128,7 +128,7 @@ export function AccordionPrefab(props: any) {
                                 RenderTarget.current() != "CANVAS" ? (
                                     <motion.div
                                         animate={
-                                            currentItem === `item - ${i} `
+                                            currentItem === `item-${i} `
                                                 ? "opened"
                                                 : "closed"
                                         }
@@ -142,7 +142,7 @@ export function AccordionPrefab(props: any) {
                                             name={"ChevronDownIcon"}
                                         />
                                     </motion.div>
-                                ) : currentItem === `item - ${i} ` ? (
+                                ) : currentItem === `item-${i} ` ? (
                                     <RadixIconPrefab
                                         aria-hidden
                                         name={"ChevronUpIcon"}
@@ -154,7 +154,7 @@ export function AccordionPrefab(props: any) {
                                     />
                                 )
                             ) : RenderTarget.current() === "CANVAS" ? (
-                                currentItem === `item - ${i} ` ? (
+                                currentItem === `item-${i} ` ? (
                                     closeIcon
                                 ) : (
                                     openIcon
@@ -164,7 +164,7 @@ export function AccordionPrefab(props: any) {
                                     <motion.div
                                         initial="visible"
                                         animate={
-                                            currentItem != `item - ${i} `
+                                            currentItem != `item-${i} `
                                                 ? "hidden"
                                                 : "visible"
                                         }
@@ -181,7 +181,7 @@ export function AccordionPrefab(props: any) {
                                             top: 0,
                                         }}
                                         animate={
-                                            currentItem === `item - ${i} `
+                                            currentItem === `item-${i} `
                                                 ? "hidden"
                                                 : "visible"
                                         }
@@ -217,8 +217,8 @@ export function AccordionPrefab(props: any) {
                             </AnimatePresence>
                         )}
                     </Accordion.Content>
-                </Accordion.Item>
-            })}
+                </Accordion.Item>)
+            }) : "⚠️ Add an item to the items prop array"}
 
         </Accordion.Root >
     )
