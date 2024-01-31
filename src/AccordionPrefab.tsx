@@ -1,11 +1,11 @@
-import { addPropertyControls, RenderTarget, ControlType } from "framer"
+import { RenderTarget } from "framer"
 import * as Accordion from "@radix-ui/react-accordion"
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import styles from "./AccordionPrefab.modules.css"
 import {
     RadixIconPrefab,
-} from "https://www.thoughttolife.com/framerPrefabs/framerprefabs@0.0.1/index.js?21"
+} from "./radixIcon"
 import { v4 as uuidv4 } from "uuid"
 
 const contentVariants = {
