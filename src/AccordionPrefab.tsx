@@ -219,7 +219,6 @@ export function AccordionPrefab(props: any) {
                     </Accordion.Content>
                 </Accordion.Item>)
             }) : "⚠️ Add an item to the items prop array"}
-
         </Accordion.Root >
     )
 }

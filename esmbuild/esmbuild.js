@@ -35,7 +35,7 @@ async function serve(path = defaultPath, port = 8000) {
         console.log(line)
     }
 
-    await esbuild.serve({ port, onRequest }, await getBuildOptions(path)))
+    await esbuild.serve({ port, onRequest }, await getBuildOptions(path))
     console.log(`Server listening at http://127.0.0.1:${port}`)
 }
 
