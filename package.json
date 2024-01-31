@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/react": "^17.0.14",
     "esbuild": "^0.12.15",
-    "framer-motion": "^4.1.17",
+    "framer-motion": "^11.0.3",
     "fs-extra": "^10.0.0",
     "globby": "^11.0.4",
     "postcss": "^8.4.33",

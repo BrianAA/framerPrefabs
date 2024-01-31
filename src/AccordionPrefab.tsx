@@ -1,119 +1,161 @@
+import { addPropertyControls, RenderTarget, ControlType } from "framer"
 import * as Accordion from "@radix-ui/react-accordion"
-import { styled, css } from "@stitches/react"
-import React, { useState, useEffect } from "react"
-import { addPropertyControls, ControlType } from "framer"
-import { motion } from "framer-motion"
-import { cloneDeep } from 'lodash';
+import { styled, css, keyframes } from "@stitches/react"
+import React, { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import prefabStyle from "./AccordionPrefab.module.css"
+import {
+    RadixIconPrefab,
+} from "https://www.thoughttolife.com/framerPrefabs/framerprefabs@0.0.1/index.js?21"
+
+const contentVariants = {
+    open: { opacity: 1, height: "var(--radix-accordion-content-height)" },
+    closed: { opacity: 0, height: 0 },
+}
+
+const displayVariants = {
+    visible: { opacity: 0 },
+    hidden: { opacity: 1 },
+}
 /**
  * These annotations control how your component sizes
  * Learn more: https://www.framer.com/developers/#code-components-auto-sizing
  *
- * @framerSupportedLayoutWidth 200
- * @framerSupportedLayoutHeight 100
+ * @framerIntrinsicWidth 400
+ *
+ *
+ * @framerDisableUnlink
+ *
+ * @framerSupportedLayoutWidth any-prefer-fixed
+ * @framerSupportedLayoutHeight auto
  */
-export function AccordionPrefab({ useFramer, items, trigger, content, style }) {
-    const [newProps, setNewProps] = useState([]);
-    const AccordionTrigger = styled(Accordion.Trigger, {
-        backgroundColor: "transparent",
-        border: "none",
-    })
-    function findPrefabProperty(obj, titleToFind) {
-        for (let key in obj) {
-            const title = obj[key]?.title
-            if (title && title.toLowerCase() === titleToFind.toLowerCase()) {
-                return key
-            }
+export function AccordionPrefab(props: any) {
 
-            if (typeof obj[key] === "object" && obj[key] !== null) {
-                const result = findPrefabProperty(obj[key], titleToFind)
-                if (result) return result
-            }
-        }
-        return null
-    }
-
+    const openIcon = "⚠️"
+    const closeIcon = "⚠️"
+    const [currentItem, setCurrentItem] = useState(null)
     useEffect(() => {
-        const _UpdatedProps = [];
-        const titleToFind = "$-header";
-        let headerProp = "";
+        setCurrentItem(`item-1`)
+    }, [])
 
-        if (trigger && trigger[0]) {
-            for (let i = 0; i < items.length; i++) {
-                let item = items[i];
-                // Clone newProps for each item
-                let newProps = cloneDeep(trigger[0].props)
-                // Assign Header Prop if one does not exist.
-                if (newProps.children?.type?.propertyControls) {
-                    // Looks for header property name
-                    headerProp = findPrefabProperty(
-                        newProps.children.type.propertyControls,
-                        titleToFind
-                    );
-                    // Only if a header prop was found
-                    if (headerProp) {
-                        newProps.children.key = i;
-                        newProps.children.props[`${headerProp}`] = item.header;
-                    }
-                }
-                _UpdatedProps.push(newProps);
-            }
-        }
-        setNewProps(_UpdatedProps);
-    }, [items, trigger, content, useFramer]);
-
-    const basicStyle = css({ width: "100%", height: 60 })
-    //For Simple Accordion Items
-    const SimpleAccordionItems = () => {
-        if (items.length == 0) {
-            return <p>🪗 Add a accordion Item</p>
-        }
-        return items.map((item, i) => (
-            <Accordion.Item
-                className={css({ padding: 0, margin: 0 })}
-                value={`item-${i}`}
-                key={i}
-            >
-                <Accordion.Header className={css({ padding: 0, margin: 0 })}>
-                    <AccordionTrigger className={basicStyle()}>
-                        {item.header}
-                    </AccordionTrigger>
-                </Accordion.Header>
-                <Accordion.Content>{item.content}</Accordion.Content>
-            </Accordion.Item>
-        ))
+    const iconVariants = {
+        opened: { rotate: 0 },
+        closed: { rotate: 180 },
     }
-
+    // Updated onValueChange handler
+    const handleValueChange = (value) => {
+        if (value === currentItem) {
+            // Close the current item
+            setCurrentItem(null)
+        } else {
+            // Open the new item
+            setCurrentItem(value)
+        }
+    }
+    const useDefaultIcon = true;
     return (
         <Accordion.Root
-            style={{ ...style }}
-            className={css({ padding: 0, margin: 0, "& h3": { margin: 0 } })}
+            style={{ width: "100%" }}
+            defaultValue={`item-1`}
+            onValueChange={handleValueChange}
+            type="single"
             collapsible
+            value={currentItem}
         >
-            {useFramer &&
-                newProps.map((_prop, i) => {
-                    return (<Accordion.Item
-                        className={css({ padding: 0, margin: 0 })}
-                        value={`item-${i}`}
-                        key={i}
-                    >
-                        <Accordion.Header className={css({ padding: 0, margin: 0 })}>
-                            <AccordionTrigger className={css({ width: "100%" })}>
-                                {React.cloneElement(trigger[0], {
-                                    ..._prop,
-                                    style: { width: "100%" },
-                                    className: ""
-                                })}
-                            </AccordionTrigger>
-                        </Accordion.Header>
-                        <Accordion.Content>Content goes here</Accordion.Content>
-                    </Accordion.Item>)
-                })
-            }
-            {!useFramer &&
-                <SimpleAccordionItems />
-            }
+            <Accordion.Item value={`item-1`}>
+                <Accordion.Header>
+                    <Accordion.Trigger style={{ width: "200px" }} className={prefabStyle.accordionTrigger}>
+                        <span className="prefab-text">Hello</span>
+                        {useDefaultIcon ? (
+                            RenderTarget.current() != "CANVAS" ? (
+                                <motion.div
+                                    animate={
+                                        currentItem === `item-1`
+                                            ? "opened"
+                                            : "closed"
+                                    }
+                                    transition={{ duration: 0.03 }}
+                                    variants={iconVariants}
+                                >
+                                    <RadixIconPrefab
+                                        aria-hidden
+                                        name={"ChevronDownIcon"}
+                                    />
+                                </motion.div>
+                            ) : currentItem === `item-1` ? (
+                                <RadixIconPrefab
+                                    aria-hidden
+                                    name={"ChevronUpIcon"}
+                                />
+                            ) : (
+                                <RadixIconPrefab
+                                    aria-hidden
+                                    name={"ChevronDownIcon"}
+                                />
+                            )
+                        ) : RenderTarget.current() === "CANVAS" ? (
+                            currentItem === `item-1` ? (
+                                closeIcon
+                            ) : (
+                                openIcon
+                            )
+                        ) : (
+                            <div>
+                                <motion.div
+                                    initial="visible"
+                                    animate={
+                                        currentItem != `item-1`
+                                            ? "hidden"
+                                            : "visible"
+                                    }
+                                    variants={displayVariants}
+                                    transition={{ duration: 0.03 }}
+                                >
+                                    {openIcon}
+                                </motion.div>
+                                <motion.div
+                                    initial="visible"
+                                    style={{
+                                        position: "absolute",
+                                        left: 0,
+                                        top: 0,
+                                    }}
+                                    animate={
+                                        currentItem === `item-1`
+                                            ? "hidden"
+                                            : "visible"
+                                    }
+                                    variants={displayVariants}
+                                    transition={{ duration: 0.03 }}
+                                >
+                                    {closeIcon}
+                                </motion.div>
+                            </div>
+                        )}
+                    </Accordion.Trigger>
+                </Accordion.Header>
+                <Accordion.Content>
+                    {RenderTarget.current() === "CANVAS" ? (
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: "<p>Hi canvas content</p>",
+                            }}
+                        ></div>
+                    ) : (
+                        <AnimatePresence>
+                            <motion.div
+                                initial="closed"
+                                animate="open"
+                                exit="closed"
+                                variants={contentVariants}
+                                transition={{ duration: 0.03 }}
+                            >
+                                <p>Hi content</p>
+                            </motion.div>
+                        </AnimatePresence>
+                    )}
+                </Accordion.Content>
+            </Accordion.Item>
         </Accordion.Root>
     )
 }
-
-

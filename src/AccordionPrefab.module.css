@@ -1,0 +1,72 @@
+:root {
+    --headerBorderColor: transparent;
+    --headerBorderWidth: 1px;
+    --headerBorderRadius: 0px;
+    --headerMinHeight: 40px;
+    --headerBackground: white;
+    --headerIconMargin: 4px;
+    --headerTextAlign: left;
+    --headerColor: black;
+    --headerFontFamily: "sans-serif";
+    --headerFontWeight: "300";
+    --headerLineHeight: 1.1;
+    --headerFontSize: 16px;
+    --headerLetterSpacing: 0em;
+    --headerTextTransform: none;
+    --headerPadding: 0px;
+    --headerPosition: 0;
+    --contentColor: rgb(78, 78, 78);
+    --contentBackground: rgb(196, 196, 196);
+    --contentTextAlign: left;
+    --contentColor: black;
+    --contentFontFamily: "sans-serif";
+    --contentFontWeight: "300";
+    --contentLineHeight: 1.1;
+    --contentFontSize: 16px;
+    --contentLetterSpacing: 0em;
+    --contentTextTransform: none;
+    --contentPadding: 16px;
+    --contentLinkDecoration: underline;
+    --contentLinkColor: rgb(21, 93, 210);
+    --contentLinkTransform: none;
+    --contentListUnorderedStyle: disc;
+    --contentListUnorderedPadding: 16px;
+    --contentListUnorderedMarkerColor: rgb(80, 80, 80);
+    --contentListOrderedStyle: decimal;
+    --contentListOrderedPadding: 16px;
+    --contentListOrderedMarkerColor: rgb(80, 80, 80);
+}
+
+.accordionTrigger {
+    all: unset;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--headerMinHeight);
+    background: var(--headerBackground);
+    gap: var(--headerIconMargin);
+    display: flex;
+    align-items: center;
+    vertical-align: center;
+    text-align: var(--headerTextAlign);
+    color: var(--headerColor);
+    font-family: var(--headerFontFamily);
+    font-weight: var(--headerFontWeight);
+    font-size: var(--headerFontSize);
+    line-height: var(--headerLineHeight);
+    letter-spacing: var(--headerLineHeight);
+    text-transform: var(--headerLetterSpacing);
+    padding: var(--headerPadding)
+}
+
+.AccordionTrigger span.prefab-text {
+    width: "100%";
+    order: var(--headerPosition),
+}
+
+.customIconHolder {
+    position: "relative";
+    height: 16px;
+    width: 16px;
+}
+
+.AccordionContent {}
