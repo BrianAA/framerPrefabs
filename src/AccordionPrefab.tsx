@@ -1,12 +1,12 @@
 import { addPropertyControls, RenderTarget, ControlType } from "framer"
 import * as Accordion from "@radix-ui/react-accordion"
-import { styled, css, keyframes } from "@stitches/react"
 import React, { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import prefabStyle from "./AccordionPrefab.module.css"
+import styles from "./AccordionPrefab.modules.css"
 import {
     RadixIconPrefab,
 } from "https://www.thoughttolife.com/framerPrefabs/framerprefabs@0.0.1/index.js?21"
+import { v4 as uuidv4 } from "uuid"
 
 const contentVariants = {
     open: { opacity: 1, height: "var(--radix-accordion-content-height)" },
@@ -30,132 +30,196 @@ const displayVariants = {
  * @framerSupportedLayoutHeight auto
  */
 export function AccordionPrefab(props: any) {
+    const { style,
+        items = [],
+        activeItem,
+        useDefaultIcon,
+        icons,
+        animation,
+        header,
+        content,
+    } = props
 
-    const openIcon = "⚠️"
-    const closeIcon = "⚠️"
-    const [currentItem, setCurrentItem] = useState(null)
+    const openIcon = icons.length > 0 ? icons[0] : "⚠️";
+    const closeIcon = icons.length > 0 ? icons[1] : "⚠️";
+    const [currentItem, setCurrentItem] = useState("item")
     useEffect(() => {
-        setCurrentItem(`item-1`)
-    }, [])
+        setCurrentItem(`item-${activeItem}`)
+    }, [activeItem])
 
     const iconVariants = {
-        opened: { rotate: 0 },
-        closed: { rotate: 180 },
+        opened: { rotate: animation?.iconDefault?.start },
+        closed: { rotate: animation?.iconDefault?.end },
     }
     // Updated onValueChange handler
-    const handleValueChange = (value) => {
+    const handleValueChange = (value: string) => {
         if (value === currentItem) {
             // Close the current item
-            setCurrentItem(null)
+            setCurrentItem("")
         } else {
             // Open the new item
             setCurrentItem(value)
         }
     }
-    const useDefaultIcon = true;
+
+    const headerStyleVariables = {
+        "--headerBorderColor": header?.border?.color,
+        "--headerBorderWidth": header?.border?.width,
+        "--headerBorderRadius": header?.border?.borderWidthPerSide
+            ? `${header.border.borderWidthTop}px ${header.border.borderWidthRight}px ${header.border.borderWidthBottom}px ${header.border.borderWidthLeft}px` : `${header.border.width}px`,
+        "--headerMinHeight": header?.height,
+        "--headerBackground": header?.background,
+        "--headerIconMargin": header?.iconMargin,
+        "--headerTextAlign": header?.text?.textAlign,
+        "--headerColor": header?.text?.color,
+        "--headerFontFamily": header?.text?.font?.fontFamily,
+        "--headerFontWeight": header?.text?.font?.fontWeight,
+        "--headerLineHeight": header?.text?.lineHeight,
+        "--headerFontSize": header?.text?.font?.fontSize,
+        "--headerLetterSpacing": header?.text?.spacing,
+        "--headerTextTransform": header?.text?.transform,
+        "--headerPadding": header?.paddingPerSide
+            ? `${header.paddingTop}px ${header.paddingRight}px ${header.paddingBottom}px ${header.paddingLeft}px`
+            : `${header.padding}px`,
+        "--headerPosition": header?.position,
+    }
+
+    const contentStyleVariables = {
+        "--contentColor": content?.color,
+        "--contentBackground": content?.background,
+        "--contentTextAlign": content?.font?.textAlign,
+        "--contentFontFamily": content?.font?.fontFamily,
+        "--contentFontWeight": content?.font?.fontWeight,
+        "--contentLineHeight": content?.line,
+        "--contentFontSize": content?.font?.fontSize,
+        "--contentLetterSpacing": content?.spacing + "em",
+        "--contentTextTransform": content?.transform,
+        "--contentPadding": content?.paddingPerSide
+            ? `${content.paddingTop}px ${content.paddingRight}px ${content.paddingBottom}px ${content.paddingLeft}px`
+            : `${content.padding}px`,
+        "--contentLinkDecoration": content?.link?.decoration,
+        "--contentLinkColor": content?.link?.color,
+        "--contentLinkTransform": content?.link?.transform,
+        "--contentListUnorderedStyle": content?.list?.unordered.style,
+        "--contentListUnorderedPadding": content?.list?.unordered.paddingPerSide
+            ? `${content.list.unordered.paddingTop}px ${content.list.unordered.paddingRight}px ${content.list.unordered.paddingBottom}px ${content.list.unordered.paddingLeft}px` : `${content.list.unordered.padding}px`,
+        "--contentListUnorderedMarkerColor": content?.list?.unordered.color,
+        "--contentListOrderedStyle": content?.list?.ordered.style,
+        "--contentListOrderedPadding": content?.list?.ordered.paddingPerSide
+            ? `${content.list.ordered.paddingTop}px ${content.list.ordered.paddingRight}px ${content.list.ordered.paddingBottom}px ${content.list.ordered.paddingLeft}px`
+            : `${content.list.ordered.padding}px`,
+        "--contentListOrderedMarkerColor": content?.list?.ordered.color,
+    }
     return (
         <Accordion.Root
             style={{ width: "100%" }}
-            defaultValue={`item-1`}
+            defaultValue={currentItem}
             onValueChange={handleValueChange}
             type="single"
             collapsible
             value={currentItem}
         >
-            <Accordion.Item value={`item-1`}>
-                <Accordion.Header>
-                    <Accordion.Trigger style={{ width: "200px" }} className={prefabStyle.accordionTrigger}>
-                        <span className="prefab-text">Hello</span>
-                        {useDefaultIcon ? (
-                            RenderTarget.current() != "CANVAS" ? (
-                                <motion.div
-                                    animate={
-                                        currentItem === `item-1`
-                                            ? "opened"
-                                            : "closed"
-                                    }
-                                    transition={{ duration: 0.03 }}
-                                    variants={iconVariants}
-                                >
+            {items.length > 0 && items.map((item, i) => {
+                <Accordion.Item key={uuidv4()} value={`item- ${i}`}>
+                    <Accordion.Header>
+                        <Accordion.Trigger style={headerStyleVariables} className={styles.triggerStyle}>
+                            <span className={styles.headerText}>{item.header}</span>
+                            {useDefaultIcon ? (
+                                RenderTarget.current() != "CANVAS" ? (
+                                    <motion.div
+                                        animate={
+                                            currentItem === `item - ${i} `
+                                                ? "opened"
+                                                : "closed"
+                                        }
+                                        transition={
+                                            animation?.iconDefault?.transition
+                                        }
+                                        variants={iconVariants}
+                                    >
+                                        <RadixIconPrefab
+                                            aria-hidden
+                                            name={"ChevronDownIcon"}
+                                        />
+                                    </motion.div>
+                                ) : currentItem === `item - ${i} ` ? (
+                                    <RadixIconPrefab
+                                        aria-hidden
+                                        name={"ChevronUpIcon"}
+                                    />
+                                ) : (
                                     <RadixIconPrefab
                                         aria-hidden
                                         name={"ChevronDownIcon"}
                                     />
-                                </motion.div>
-                            ) : currentItem === `item-1` ? (
-                                <RadixIconPrefab
-                                    aria-hidden
-                                    name={"ChevronUpIcon"}
-                                />
+                                )
+                            ) : RenderTarget.current() === "CANVAS" ? (
+                                currentItem === `item - ${i} ` ? (
+                                    closeIcon
+                                ) : (
+                                    openIcon
+                                )
                             ) : (
-                                <RadixIconPrefab
-                                    aria-hidden
-                                    name={"ChevronDownIcon"}
-                                />
-                            )
-                        ) : RenderTarget.current() === "CANVAS" ? (
-                            currentItem === `item-1` ? (
-                                closeIcon
-                            ) : (
-                                openIcon
-                            )
+                                <div className={styles.iconHolder}>
+                                    <motion.div
+                                        initial="visible"
+                                        animate={
+                                            currentItem != `item - ${i} `
+                                                ? "hidden"
+                                                : "visible"
+                                        }
+                                        variants={displayVariants}
+                                        transition={animation?.iconCustom}
+                                    >
+                                        {openIcon}
+                                    </motion.div>
+                                    <motion.div
+                                        initial="visible"
+                                        style={{
+                                            position: "absolute",
+                                            left: 0,
+                                            top: 0,
+                                        }}
+                                        animate={
+                                            currentItem === `item - ${i} `
+                                                ? "hidden"
+                                                : "visible"
+                                        }
+                                        variants={displayVariants}
+                                        transition={{ duration: 0.03 }}
+                                    >
+                                        {closeIcon}
+                                    </motion.div>
+                                </div>
+                            )}
+                        </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content style={contentStyleVariables} className={styles.contentStyle}>
+                        {RenderTarget.current() === "CANVAS" ? (
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: "<p>Hi canvas content</p>",
+                                }}
+                            ></div>
                         ) : (
-                            <div>
+                            <AnimatePresence>
                                 <motion.div
-                                    initial="visible"
-                                    animate={
-                                        currentItem != `item-1`
-                                            ? "hidden"
-                                            : "visible"
+                                    initial="closed"
+                                    animate="open"
+                                    exit="closed"
+                                    variants={contentVariants}
+                                    transition={
+                                        animation?.expand
                                     }
-                                    variants={displayVariants}
-                                    transition={{ duration: 0.03 }}
                                 >
-                                    {openIcon}
+                                    {item.content}
                                 </motion.div>
-                                <motion.div
-                                    initial="visible"
-                                    style={{
-                                        position: "absolute",
-                                        left: 0,
-                                        top: 0,
-                                    }}
-                                    animate={
-                                        currentItem === `item-1`
-                                            ? "hidden"
-                                            : "visible"
-                                    }
-                                    variants={displayVariants}
-                                    transition={{ duration: 0.03 }}
-                                >
-                                    {closeIcon}
-                                </motion.div>
-                            </div>
+                            </AnimatePresence>
                         )}
-                    </Accordion.Trigger>
-                </Accordion.Header>
-                <Accordion.Content>
-                    {RenderTarget.current() === "CANVAS" ? (
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: "<p>Hi canvas content</p>",
-                            }}
-                        ></div>
-                    ) : (
-                        <AnimatePresence>
-                            <motion.div
-                                initial="closed"
-                                animate="open"
-                                exit="closed"
-                                variants={contentVariants}
-                                transition={{ duration: 0.03 }}
-                            >
-                                <p>Hi content</p>
-                            </motion.div>
-                        </AnimatePresence>
-                    )}
-                </Accordion.Content>
-            </Accordion.Item>
-        </Accordion.Root>
+                    </Accordion.Content>
+                </Accordion.Item>
+            })}
+
+        </Accordion.Root >
     )
 }

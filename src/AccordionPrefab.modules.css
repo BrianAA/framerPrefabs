@@ -7,7 +7,7 @@
     --headerIconMargin: 4px;
     --headerTextAlign: left;
     --headerColor: black;
-    --headerFontFamily: "sans-serif";
+    --headerFontFamily: sans-serif;
     --headerFontWeight: "300";
     --headerLineHeight: 1.1;
     --headerFontSize: 16px;
@@ -18,7 +18,6 @@
     --contentColor: rgb(78, 78, 78);
     --contentBackground: rgb(196, 196, 196);
     --contentTextAlign: left;
-    --contentColor: black;
     --contentFontFamily: "sans-serif";
     --contentFontWeight: "300";
     --contentLineHeight: 1.1;
@@ -37,7 +36,7 @@
     --contentListOrderedMarkerColor: rgb(80, 80, 80);
 }
 
-.accordionTrigger {
+.triggerStyle {
     all: unset;
     box-sizing: border-box;
     width: 100%;
@@ -55,18 +54,67 @@
     line-height: var(--headerLineHeight);
     letter-spacing: var(--headerLineHeight);
     text-transform: var(--headerLetterSpacing);
-    padding: var(--headerPadding)
+    padding: var(--headerPadding);
 }
 
-.AccordionTrigger span.prefab-text {
-    width: "100%";
+.headerText {
+    width: 100%;
     order: var(--headerPosition),
 }
 
-.customIconHolder {
+.iconHolder {
     position: "relative";
-    height: 16px;
-    width: 16px;
 }
 
-.AccordionContent {}
+.contentStyle {
+    overflow: hidden;
+    color: var(--contentColor);
+    background: var(--contentBackground);
+    font-family: var(--contentFontFamily);
+    font-weight: var(--contentFontWeight);
+    font-size: var(--contentFontSize);
+    line-height: var(--contentLineHeight);
+    letter-spacing: var(--contentLetterSpacing);
+    text-align: var(--contentTextAlign);
+    text-align: var(--contentTextTransform);
+    padding: var(--contentPadding);
+}
+
+
+
+.contentStyle p,
+.contentStyle h1,
+.contentStyle h2,
+.contentStyle h3,
+.contentStyle h4,
+.contentStyle h5,
+.contentStyle h6 {
+    all: unset;
+}
+
+
+.contentStyle a {
+    text-decoration: var(--contentLinkDecoration);
+    color: var(--contentLinkColor);
+    text-transform: var(--contentLinkTransform);
+}
+
+.contentStyle ol {
+    list-style: var(--contentListOrderedStyle);
+    margin: 0;
+    padding: var(--contentListOrderedPadding);
+}
+
+.contentStyle ol li::marker {
+    color: var(--contentListOrderedMarkerColor);
+}
+
+.contentStyle ul {
+    list-style: var(--contentListUnorderedStyle);
+    margin: 0;
+    padding: var(--contentListUnorderedPadding);
+}
+
+.contentStyle ul li::marker {
+    color: var(--contentListUnorderedMarkerColor)
+}
