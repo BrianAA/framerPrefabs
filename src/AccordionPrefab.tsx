@@ -61,26 +61,29 @@ export function AccordionPrefab(props: any) {
             setCurrentItem(value)
         }
     }
-
-    const headerStyleVariables = {
+    const itemStyleVariables = {
         "--headerBorderColor": header?.border?.color,
         "--headerBorderWidth": header?.border?.width,
         "--headerBorderRadius": header?.border?.borderWidthPerSide
             ? `${header.border.borderWidthTop}px ${header.border.borderWidthRight}px ${header.border.borderWidthBottom}px ${header.border.borderWidthLeft}px` : `${header.border.width}px`,
-        "--headerMinHeight": header?.height,
+    }
+    const headerStyleVariables = {
+        "--headerMinHeight": header?.height + "px",
         "--headerBackground": header?.background,
-        "--headerIconMargin": header?.iconMargin,
+        "--headerIconMargin": header?.iconMargin + "px",
         "--headerTextAlign": header?.text?.textAlign,
         "--headerColor": header?.text?.color,
         "--headerFontFamily": header?.text?.font?.fontFamily,
         "--headerFontWeight": header?.text?.font?.fontWeight,
         "--headerLineHeight": header?.text?.lineHeight,
-        "--headerFontSize": header?.text?.font?.fontSize,
-        "--headerLetterSpacing": header?.text?.spacing,
+        "--headerFontSize": header?.text?.font?.fontSize + "px",
+        "--headerLetterSpacing": header?.text?.spacing + "em",
         "--headerTextTransform": header?.text?.transform,
         "--headerPadding": header?.paddingPerSide
             ? `${header.paddingTop}px ${header.paddingRight}px ${header.paddingBottom}px ${header.paddingLeft}px`
             : `${header.padding}px`,
+    }
+    const headerTextStyleVariables = {
         "--headerPosition": header?.position,
     }
 
@@ -91,7 +94,7 @@ export function AccordionPrefab(props: any) {
         "--contentFontFamily": content?.font?.fontFamily,
         "--contentFontWeight": content?.font?.fontWeight,
         "--contentLineHeight": content?.line,
-        "--contentFontSize": content?.font?.fontSize,
+        "--contentFontSize": content?.font?.fontSize + "px",
         "--contentLetterSpacing": content?.spacing + "em",
         "--contentTextTransform": content?.transform,
         "--contentPadding": content?.paddingPerSide
@@ -120,10 +123,10 @@ export function AccordionPrefab(props: any) {
             value={currentItem}
         >
             {items.length > 0 ? items.map((item, i) => {
-                return (<Accordion.Item key={uuidv4()} value={`item-${i}`}>
+                return (<Accordion.Item style={itemStyleVariables} className={styles.itemStyle} key={uuidv4()} value={`item-${i}`}>
                     <Accordion.Header>
                         <Accordion.Trigger style={headerStyleVariables} className={styles.triggerStyle}>
-                            <span className={styles.headerText}>{item.header}</span>
+                            <span style={headerTextStyleVariables} className={styles.headerText}>{item.header}</span>
                             {useDefaultIcon ? (
                                 RenderTarget.current() != "CANVAS" ? (
                                     <motion.div
@@ -198,7 +201,7 @@ export function AccordionPrefab(props: any) {
                         {RenderTarget.current() === "CANVAS" ? (
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: "<p>Hi canvas content</p>",
+                                    __html: item.content,
                                 }}
                             ></div>
                         ) : (

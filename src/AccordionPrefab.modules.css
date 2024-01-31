@@ -36,6 +36,14 @@
     --contentListOrderedMarkerColor: rgb(80, 80, 80);
 }
 
+.itemStyle {
+    border-style: solid;
+    overflow: hidden;
+    border-color: var(--headerBorderColor);
+    border-width: var(--headerBorderWidth);
+    border-radius: var(--headerBorderRadius);
+}
+
 .triggerStyle {
     all: unset;
     box-sizing: border-box;
@@ -45,15 +53,15 @@
     gap: var(--headerIconMargin);
     display: flex;
     align-items: center;
-    vertical-align: center;
+    vertical-align: middle;
     text-align: var(--headerTextAlign);
     color: var(--headerColor);
     font-family: var(--headerFontFamily);
     font-weight: var(--headerFontWeight);
     font-size: var(--headerFontSize);
     line-height: var(--headerLineHeight);
-    letter-spacing: var(--headerLineHeight);
-    text-transform: var(--headerLetterSpacing);
+    letter-spacing: var(--headerLetterSpacing);
+    text-transform: var(--headerTextTransform);
     padding: var(--headerPadding);
 }
 
@@ -76,7 +84,7 @@
     line-height: var(--contentLineHeight);
     letter-spacing: var(--contentLetterSpacing);
     text-align: var(--contentTextAlign);
-    text-align: var(--contentTextTransform);
+    text-transform: var(--contentTextTransform);
     padding: var(--contentPadding);
 }
 
