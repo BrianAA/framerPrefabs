@@ -169,23 +169,28 @@ export const palette = {
 }
 
 export const sizes = {
-    50: 9,
+    50: 4,
+    75: 8,
     100: 12,
     200: 16,
-    300: 21,
-    400: 28,
-    500: 38,
-    600: 51,
+    300: 20,
+    400: 24,
+    500: 28,
+    600: 32,
+    700: 36,
+    800: 40,
+    900: 44,
+    1000: 60,
 }
 
 export const theme = {
     colors: {
-        background: palette.colors.gray[50],
+        background: palette.colors.white,
         onBackground: palette.colors.gray[900],
         onBackground_subtle: palette.colors.gray[650],
         primary: palette.colors.gray[900],
         primary_hover: palette.colors.gray[700],
-        onPrimary: palette.colors.gray[50],
+        onPrimary: palette.colors.white,
         onPrimary_Hover: palette.colors.gray[200],
         secondary: palette.colors.gray[100],
         secondaryHover: palette.colors.gray[300],
@@ -205,11 +210,11 @@ export const theme = {
         onDisabled: palette.colors.alpha[50],
     },
     fontSize: {
-        xs: sizes[50],
+        xs: sizes[75],
         sm: sizes[100],
         md: sizes[200],
-        lg: sizes[300],
-        xl: sizes[400]
+        lg: sizes[400],
+        xl: sizes[600]
     },
     text: {
         meta: {
