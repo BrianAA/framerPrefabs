@@ -1,7 +1,7 @@
 import { RenderTarget } from "framer"
 import * as Accordion from "@radix-ui/react-accordion"
-import { styled, css, keyframes } from "@stitches/react"
-import React, { useState, useEffect, useRef } from "react"
+import { styled } from "@stitches/react"
+import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { RadixIconPrefab } from "./radixIcon"
 
@@ -26,7 +26,7 @@ const displayVariants = {
  * @framerSupportedLayoutWidth any-prefer-fixed
  * @framerSupportedLayoutHeight auto
  */
-export default function AccordionPrefab(props: any) {
+export function AccordionPrefab(props: any) {
     const {
         style,
         items = [],
