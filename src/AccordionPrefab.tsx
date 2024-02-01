@@ -26,7 +26,7 @@ const displayVariants = {
  * @framerSupportedLayoutWidth any-prefer-fixed
  * @framerSupportedLayoutHeight auto
  */
-export default function Accordion_final(props: any) {
+export default function AccordionPrefab(props: any) {
     const {
         style,
         items = [],
