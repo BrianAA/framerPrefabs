@@ -87,7 +87,7 @@ export function AccordionPrefab(props: any) {
         outlineColor: "transparent",
         "&:focus-within": {
             outlineWidth: header?.focus?.width + "px",
-            outlineStyle: header?.focus?.style,
+            outlineStyle: "solid",
             outlineOffset: header?.focus?.offset + "px",
             outlineColor: header?.focus?.color,
         },
@@ -578,11 +578,6 @@ addPropertyControls(AccordionPrefab, {
                     color: {
                         type: ControlType.Color,
                         defaultValue: theme.colors.signal,
-                    },
-                    style: {
-                        type: ControlType.Enum,
-                        options: ["solid", "none"],
-                        optionTitles: ["Solid", "None"],
                     },
                 },
             },
