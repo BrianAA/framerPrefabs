@@ -220,16 +220,6 @@ export function AccordionPrefab(props: any) {
         },
     }
 
-    // Updated onValueChange handler
-    const handleValueChange = (value: string) => {
-        if (value === currentItem) {
-            // Close the current item
-            setCurrentItem("")
-        } else {
-            // Open the new item
-            setCurrentItem(value)
-        }
-    }
     return (
         <>
             {loading ? (
@@ -241,10 +231,9 @@ export function AccordionPrefab(props: any) {
                     css={rootStyles}
                     style={{ width: style.width }}
                     defaultValue={`item-${activeItem}`}
-                    onValueChange={handleValueChange}
+                    onValueChange={(e) => setCurrentItem(e)}
                     type="single"
                     collapsible
-                    value={currentItem}
                 >
                     {items.length > 0 &&
                         items.map((item, i) => (
@@ -357,27 +346,25 @@ export function AccordionPrefab(props: any) {
                                         </CustomIconHolder>
                                     )}
                                 </AccordionHeader>
-                                <AccordionContent
-                                    as={motion.div}
-                                    initial="closed"
-                                    animate={currentItem == `item-${i + 1}` ? "open" : "closed"}
-                                    exit="closed"
-                                    variants={contentVariants}
-                                    transition={animation?.expand} css={contentStyles}>
-                                    {RenderTarget.current() === "CANVAS" ? (
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: item.content,
-                                            }}
-                                        ></div>
-                                    ) : (
-                                        <AnimatePresence>
-
-                                            {item.content}
-
-                                        </AnimatePresence>
-                                    )}
-                                </AccordionContent>
+                                <AnimatePresence>
+                                    <AccordionContent
+                                        as={motion.div}
+                                        initial="closed"
+                                        animate={currentItem == `item-${i + 1}` ? "open" : "closed"}
+                                        exit="closed"
+                                        variants={contentVariants}
+                                        transition={animation?.expand} css={contentStyles}>
+                                        {RenderTarget.current() === "CANVAS" ? (
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: item.content,
+                                                }}
+                                            ></div>
+                                        ) : (
+                                            { item.content }
+                                        )}
+                                    </AccordionContent>
+                                </AnimatePresence>
                             </AccordionItem>
                         ))}
                 </AccordionRoot>
