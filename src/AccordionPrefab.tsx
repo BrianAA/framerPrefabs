@@ -23,6 +23,113 @@ const displayVariants = {
 }
 
 
+const AccordionRoot = styled(Accordion.Root, {
+    display: "flex",
+    flexDirection: "column",
+    gap: sizes[100],
+})
+const AccordionItem = styled(Accordion.Item, {
+    overflow: "hidden",
+    boxSizing: "border-box",
+    borderStyle: "solid",
+    borderColor: theme.colors.outline_subtle,
+    borderWidth: 1,
+    borderRadius: 0,
+    transition: "outline-color .25s",
+    outlineColor: "transparent",
+    "&:focus-within": {
+        outlineWidth: 1,
+        outlineStyle: "solid",
+        outlineOffset: 0,
+        outlineColor: theme.colors.signal,
+    },
+})
+
+const StyledHeader = styled(Accordion.Header, {
+    all: "unset",
+})
+const AccordionTrigger = styled(Accordion.Trigger, {
+    all: "unset",
+    boxSizing: "border-box",
+    width: "100%",
+    minHeight: sizes[500], //replace with property
+    background: theme.colors.background,
+    gap: sizes[50],
+    display: "flex",
+    alignItems: "center",
+    verticalAlign: "center",
+    textAlign: "left",
+    color: theme.colors.onBackground,
+    fontFamily: theme.text.meta.font,
+    fontWeight: theme.text.meta.boldWeight,
+    fontSize: theme.fontSize.md,
+    lineHeight: theme.text.meta.lineHeight,
+    letterSpacing: theme.text.meta.letterSpacing,
+    textTransform: "none",
+    padding: 0,
+    "& span.prefab-text": {
+        width: "100%",
+        order: 0,
+    },
+})
+const CustomIconHolder = styled("div", {
+    position: "relative",
+})
+
+//Make the whole header a trigger
+const AccordionHeader = React.forwardRef(
+    ({ children, value, ...props }, forwardedRef) => (
+        <StyledHeader>
+            <AccordionTrigger {...props} ref={forwardedRef}>
+                {children}
+            </AccordionTrigger>
+        </StyledHeader>
+    )
+)
+const AccordionContent = styled(Accordion.Content, {
+    overflow: "hidden",
+    color: content?.color,
+    background: content?.background,
+    fontFamily: content?.font?.fontFamily,
+    fontWeight: content?.font?.fontWeight,
+    fontSize: content?.font?.fontSize,
+    lineHeight: content?.line,
+    letterSpacing: content?.spacing + "em",
+    textAlign: content.font?.textAlign,
+    textTransform: content?.transform,
+    padding: content?.paddingPerSide
+        ? `${content?.paddingTop}px ${content?.paddingRight}px ${content?.paddingBottom}px ${content?.paddingLeft}px`
+        : `${content?.padding}px`,
+    "& p,h1,h2,h3,h4,h5,h6": {
+        all: "unset",
+    },
+    "& a": {
+        textDecoration: content?.link?.decoration,
+        color: content?.link?.color,
+        textTransform: content?.link?.transform,
+    },
+    "& ul": {
+        listStyle: content?.list?.unordered?.style,
+        margin: 0,
+        padding: content?.list?.unordered?.paddingPerSide
+            ? `${content?.list?.unordered?.paddingTop}px ${content?.list?.unordered?.paddingRight}px ${content?.list?.unordered?.paddingBottom}px ${content?.list?.unordered?.paddingLeft}px`
+            : `${content?.list?.unordered?.padding}px`,
+        "& li::marker": {
+            color: content?.list?.unordered?.color,
+        },
+    },
+    "& ol": {
+        listStyle: content?.list?.ordered?.style,
+        margin: 0,
+        padding: content?.list?.ordered?.paddingPerSide
+            ? `${content?.list.ordered?.paddingTop}px ${content?.list.ordered?.paddingRight}px ${content?.list.ordered?.paddingBottom}px ${content?.list.ordered?.paddingLeft}px`
+            : `${content?.list.ordered?.padding}px`,
+        "& li::marker": {
+            color: content?.list?.ordered.color,
+        },
+    },
+})
+
 /**
  * These annotations control how your component sizes
  * Learn more: https://www.framer.com/developers/#code-components-auto-sizing
@@ -67,15 +174,10 @@ export function AccordionPrefab(props: any) {
         closed: { rotate: animation?.iconDefault?.end },
     }
 
-    const AccordionRoot = styled(Accordion.Root, {
-        display: "flex",
-        flexDirection: "column",
+    const rootStyles = {
         gap: itemGap,
-    })
-    const AccordionItem = styled(Accordion.Item, {
-        overflow: "hidden",
-        boxSizing: "border-box",
-        borderStyle: "solid",
+    }
+    const itemStyles = {
         borderColor: header?.border?.color,
         borderWidth: header?.border?.borderWidthPerSide
             ? `${header?.border?.borderWidthTop}px ${header?.border?.borderWidthRight}px ${header?.border?.borderWidthBottom}px ${header?.border?.borderWidthLeft}px`
@@ -83,29 +185,17 @@ export function AccordionPrefab(props: any) {
         borderRadius: header?.border?.borderRadiusPerSide
             ? `${header?.border?.borderRadiusTop}px ${header?.border?.borderRadiusRight}px ${header?.border?.borderRadiusBottom}px ${header?.border?.borderRadiusLeft}px`
             : `${header?.border?.radius}px`,
-        transition: "outline-color .25s",
-        outlineColor: "transparent",
         "&:focus-within": {
             outlineWidth: header?.focus?.width + "px",
-            outlineStyle: "solid",
             outlineOffset: header?.focus?.offset + "px",
             outlineColor: header?.focus?.color,
         },
-    })
+    }
 
-    const StyledHeader = styled(Accordion.Header, {
-        all: "unset",
-    })
-    const AccordionTrigger = styled(Accordion.Trigger, {
-        all: "unset",
-        boxSizing: "border-box",
-        width: "100%",
+    const headerStyles = {
         minHeight: header?.height, //replace with property
         background: header?.background,
         gap: header?.icon?.gap,
-        display: "flex",
-        alignItems: "center",
-        verticalAlign: "center",
         textAlign: header?.text?.font?.textAlign,
         color: header?.text?.color,
         fontFamily: header?.text?.font?.fontFamily,
@@ -118,28 +208,16 @@ export function AccordionPrefab(props: any) {
             ? `${header?.paddingTop}px ${header?.paddingRight}px ${header?.paddingBottom}px ${header?.paddingLeft}px`
             : `${header?.padding}px`,
         "& span.prefab-text": {
-            width: "100%",
             order: header?.position,
         },
-    })
-    const CustomIconHolder = styled("div", {
-        position: "relative",
+    }
+    const customIconHolderStyles = {
         height: useDefaultIcon && header?.icon?.height + "px",
         width: useDefaultIcon && header?.icon?.width + "px",
-    })
+    }
 
-    //Make the whole header a trigger
-    const AccordionHeader = React.forwardRef(
-        ({ children, value, ...props }, forwardedRef) => (
-            <StyledHeader>
-                <AccordionTrigger {...props} ref={forwardedRef}>
-                    {children}
-                </AccordionTrigger>
-            </StyledHeader>
-        )
-    )
-    const AccordionContent = styled(Accordion.Content, {
-        overflow: "hidden",
+
+    const contentStyles = {
         color: content?.color,
         background: content?.background,
         fontFamily: content?.font?.fontFamily,
@@ -152,9 +230,6 @@ export function AccordionPrefab(props: any) {
         padding: content?.paddingPerSide
             ? `${content?.paddingTop}px ${content?.paddingRight}px ${content?.paddingBottom}px ${content?.paddingLeft}px`
             : `${content?.padding}px`,
-        "& p,h1,h2,h3,h4,h5,h6": {
-            all: "unset",
-        },
         "& a": {
             textDecoration: content?.link?.decoration,
             color: content?.link?.color,
@@ -180,7 +255,7 @@ export function AccordionPrefab(props: any) {
                 color: content?.list?.ordered.color,
             },
         },
-    })
+    }
 
     // Updated onValueChange handler
     const handleValueChange = (value: string) => {
@@ -200,6 +275,7 @@ export function AccordionPrefab(props: any) {
                 })
             ) : (
                 <AccordionRoot
+                    css={rootStyles}
                     style={{ width: style.width }}
                     defaultValue={`item-${activeItem}`}
                     onValueChange={handleValueChange}
@@ -210,11 +286,12 @@ export function AccordionPrefab(props: any) {
                     {items.length > 0 &&
                         items.map((item, i) => (
                             <AccordionItem
+                                css={itemStyles}
                                 data-prefab-value={item.tag}
                                 key={uuidv4()}
                                 value={`item-${i + 1}`}
                             >
-                                <AccordionHeader>
+                                <AccordionHeader css={headerStyles}>
                                     <span className="prefab-text">
                                         {item.header}
                                     </span>
@@ -278,7 +355,7 @@ export function AccordionPrefab(props: any) {
                                             openIcon
                                         )
                                     ) : (
-                                        <CustomIconHolder>
+                                        <CustomIconHolder css={customIconHolderStyles}>
                                             <motion.div
                                                 initial="visible"
                                                 animate={
@@ -317,7 +394,7 @@ export function AccordionPrefab(props: any) {
                                         </CustomIconHolder>
                                     )}
                                 </AccordionHeader>
-                                <AccordionContent>
+                                <AccordionContent css={contentStyles}>
                                     {RenderTarget.current() === "CANVAS" ? (
                                         <div
                                             dangerouslySetInnerHTML={{

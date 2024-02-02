@@ -1,208 +1,299 @@
+// Welcome to Code in Framer
+// Get Started: https://www.framer.com/developers
+import { addPropertyControls, ControlType } from "framer"
+import { motion } from "framer-motion"
+import {
+    theme,
+    sizes,
+} from "./theme"
+
+import React, { useState, useEffect, useRef, ButtonHTMLAttributes } from "react"
+import { styled } from "@stitches/react"
 import * as Switch from "@radix-ui/react-switch"
-import { styled, css } from "@stitches/react"
-import React from "react"
-interface DisabledProps {
-    opacity: number
-    color: string
-}
+import { SkeletonBox } from "./SkeletonBox"
+const ToggleContainer = styled(Switch.Root, {
+    all: "unset",
+    boxSizing: "border-box",
+    width: "100%",
+    height: sizes[300],
+    backgroundColor: theme.colors.secondary,
+    borderRadius: "9999px",
+    display: "flex",
+    alignItems: "center",
+    padding: "2px",
+    cursor: "pointer",
+    "&:hover": {
+        backgroundColor: theme.colors.secondaryHover,
+    },
+    "&:focus": {
+        outlineStyle: "solid",
+        outlineWidth: "1px",
+        outlineColor: theme.colors.signal,
+        outlineOffset: "2px",
+    },
+})
 
-interface FocusProps {
-    offset: number
-    color: string
-    style: boolean
-}
-interface ControlStyleProps {
-    height: number
-    width: number
-    inActive: string
-    active: string
-    disabled: DisabledProps
-    focus: FocusProps
-    radius: number
-}
-interface LabelStyleProps {
-    font: string,
-    size: number,
-    lineHeight: number,
-    color: string,
-    letterSpacing: number,
-    fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800,
-    position: number
-}
+const ToggleCircle = styled(Switch.Thumb, {
+    all: "unset",
+    overflow: "hidden",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    lineHeight: 1,
+    boxSizing: "border-box",
+    width: "20px",
+    height: "20px",
+    backgroundColor: "white",
+    borderRadius: "50%",
+    "& div": {
+        // Optional: Set width and height if you want to standardize child dimensions
+        maxWidth: "100%!important", // Adjust as needed
+        maxHeight: "100%!important", // Adjust as needed
+    },
+})
 
-interface ShadowProps {
-    shadowX: number,
-    shadowY: number,
-    blur: number,
-    spread: number,
-    color: string
-}
-interface ThumbStyleProps {
-    inActive: string
-    active: string
-    disabled: DisabledProps
-    shadow: ShadowProps
-}
-interface SwitchPrefabProps {
-    iconOff: any
-    iconOn: any
-    nativeLabel: any
-    controlStyles: ControlStyleProps
-    thumbStyles: ThumbStyleProps
-    labelStyles: LabelStyleProps
-    useLabel: boolean
-    text: string
-    disabled: boolean
-    formID: string
-    controlID: string
-    required: boolean
-    defaultChecked: boolean
-    name: string
-}
+const Flex = styled("div", {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "4px",
+})
 
 /**
  * These annotations control how your component sizes
  * Learn more: https://www.framer.com/developers/#code-components-auto-sizing
  *
- * @framerSupportedLayoutWidth auto
+ * @framerIntrinsicWidth 48
+ *
+ *
+ * @framerDisableUnlink
+ *
+ * @framerSupportedLayoutWidth fixed
  * @framerSupportedLayoutHeight auto
  */
-export function SwitchPrefab({
-    iconOff,
-    iconOn,
-    nativeLabel,
-    controlStyles,
-    thumbStyles,
-    labelStyles,
-    text,
-    disabled,
-    formID,
-    required,
-    defaultChecked,
-    useLabel,
-    name,
-    controlID,
-}: SwitchPrefabProps) {
+export default function SwitchPrefab(props: any) {
+    const {
+        defaultChecked,
+        useIcons,
+        icons,
+        animation,
+        switchProps,
+        thumbProps,
+    } = props
+    const [isActive, setIsActive] = useState(defaultChecked)
+    const [animWidth, setAnimWidth] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const refContainer = useRef()
+    const offIcon = icons.length > 0 ? icons[0] : "⚠️"
+    const onIcon = icons.length > 0 ? icons[1] : "⚠️"
 
+    console.log(animation)
+    useEffect(() => {
+        // Function to update the width based on the container's current width
+        setLoading(false)
+    }, []) // Empty dependency array ensures this effect runs only once on mount
 
-    const SwitchContainer = styled("div", {
-        display: "flex",
-        gap: "8px",
-        alignItems: "center",
-
-    })
-    const SwitchLabel = css({
-        fontFamily: labelStyles.font ? `${labelStyles.font}` : "sans-serif",
-        fontWeight: labelStyles.fontWeight ? labelStyles.fontWeight : "300",
-        fontSize: labelStyles.size ? labelStyles.size + "px" : "14px",
-        color: labelStyles.color ? labelStyles.color : "#666666",
-        order: labelStyles.position ? labelStyles.position : 0
-    })
-    const SwitchRoot = css({
-        all: "unset",
-        width: controlStyles ? `${controlStyles.width}px` : 32,
-        height: controlStyles ? `${controlStyles.height}px` : 16,
-        padding: 2,
-        backgroundColor: controlStyles
-            ? `${controlStyles.inActive}`
-            : "#EBEBEB",
-        borderRadius: controlStyles ? `${controlStyles.radius}px` : "9999px",
-        position: "relative",
-        "&:disabled": {
-            opacity: controlStyles ? controlStyles.disabled.opacity : 0.5,
-            backgroundColor: controlStyles
-                ? `${controlStyles.disabled.color}`
-                : "",
-        },
-        "&:focus": {
-            outlineOffset: controlStyles
-                ? `${controlStyles.focus.offset}px`
-                : "2px",
-            outlineColor: controlStyles
-                ? `${controlStyles.focus.color}`
-                : "#282A2C",
-            outlineStyle: controlStyles.focus.style ? controlStyles.focus.style : "solid",
-        },
-        '&[data-state="checked"]': {
-            backgroundColor: controlStyles
-                ? `${controlStyles.active}`
-                : "#282A2C",
-        },
-    })
-
-    const SwitchThumb = styled(Switch.Thumb, {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: controlStyles ? `${controlStyles.height}px` : 16,
-        height: controlStyles ? `${controlStyles.height}px` : 16,
-        backgroundColor: thumbStyles ? `${thumbStyles.inActive}` : "white",
-        borderRadius: controlStyles ? `${controlStyles.radius}px` : "9999px",
-        transition: "transform 200ms",
-        transform: "translateX(0px)",
-        willChange: "transform",
-        boxShadow: `${thumbStyles.shadow.shadowX}px ${thumbStyles.shadow.shadowY}px ${thumbStyles.shadow.blur}px ${thumbStyles.shadow.spread} ${thumbStyles.shadow.color}`,
-        "&[data-disabled]": {
-            opacity: thumbStyles ? thumbStyles.disabled.opacity : 0.5,
-            background: thumbStyles ? thumbStyles.disabled.color : "",
-        },
-        '&[data-state="checked"]': {
-            backgroundColor: thumbStyles ? thumbStyles.active : "",
-            transform: `translateX(${controlStyles.width - controlStyles.height}px)`,
-            "& .inactive-icon": {
-                display: "none"
-            },
-            "& .active-icon": {
-                display: "block"
+    useEffect(() => {
+        // Function to update the width based on the container's current width
+        const updateWidth = () => {
+            if (refContainer.current && !loading) {
+                setAnimWidth(refContainer.current.clientWidth)
             }
-        },
-        '&[data-state="unchecked"]': {
-            "& .inactive-icon": {
-                display: "block"
-            },
-            "& .active-icon": {
-                display: "none"
-            }
-        },
-    })
+        }
 
+        // Call updateWidth to set initial width
+        updateWidth()
 
-    const onValueChange = (e: boolean) => {
-        const customEventData = { value: e };
-        const event = new CustomEvent('SwitchPrefab', { detail: customEventData });
-        document.dispatchEvent(event);
-        console.log("event" + event)
-    };
+        // Add event listener to handle window resize
+        window.addEventListener("resize", updateWidth)
 
+        // Cleanup function to remove event listener
+        return () => window.removeEventListener("resize", updateWidth)
+    }, [loading]) // Empty dependency array ensures this effect runs only once on mount
+    const handleClick = () => {
+        setIsActive(!isActive)
+    }
+    const containerStyles = {
+        height: switchProps?.height + "px",
+        width: "100%",
+        backgroundColor: switchProps?.inactive,
+        padding: switchProps?.paddingPerSide
+            ? `${switchProps?.paddingTop}px ${switchProps?.paddingRight}px ${switchProps?.paddingBottom}px ${switchProps?.paddingLeft}px`
+            : `${switchProps?.padding}px`,
+    }
+    const thumbStyles = {
+        height: thumbProps?.size + "px",
+        width: thumbProps?.size + "px",
+    }
     return (
-        <SwitchContainer>
-            {useLabel && (
-                <label
-                    className={SwitchLabel()}
-                    htmlFor={controlID}
-                >
-                    {text ? text : "Label"}
-                </label>
+        <>
+            {loading ? (
+                <SkeletonBox style={{ width: animWidth + "px", height: switchProps?.height, borderRadius: "9999px" }} />
+            ) : (
+                <Flex>
+                    <ToggleContainer
+                        defaultChecked={defaultChecked}
+                        ref={refContainer}
+                        as={motion.button}
+                        onClick={handleClick}
+                        whileHover={{
+                            backgroundColor: isActive
+                                ? switchProps?.hoverActive
+                                : switchProps?.hover,
+                        }}
+                        transition={animation?.container}
+                        animate={isActive ? "on" : "off"}
+                        variants={{
+                            on: { backgroundColor: switchProps?.active },
+                            off: { backgroundColor: switchProps?.inactive },
+                        }}
+                        css={containerStyles}
+                    >
+                        <ToggleCircle
+                            as={motion.div}
+                            css={thumbStyles}
+                            layout
+                            initial={"off"}
+                            animate={isActive ? "on" : "off"}
+                            variants={{
+                                on: {
+                                    x: `${animWidth -
+                                        thumbProps?.size -
+                                        (switchProps?.height - thumbProps?.size)
+                                        }px`,
+                                },
+                                off: { x: 0 },
+                            }}
+                            transition={animation?.thumb}
+                        >
+                            {useIcons && <>{isActive ? onIcon : offIcon}</>}
+                        </ToggleCircle>
+                    </ToggleContainer>
+                </Flex>
             )}
-            <Switch.Root
-                className={SwitchRoot()}
-                form={formID}
-                defaultChecked={defaultChecked}
-                required={required}
-                disabled={disabled}
-                onCheckedChange={onValueChange}
-                name={name}
-                id={controlID}
-            >
-                <SwitchThumb>
-                    <span className="active-icon">
-                        {iconOff && iconOn}
-                    </span>
-                    <span className="inactive-icon">
-                        {iconOff && iconOff}
-                    </span>
-                </SwitchThumb>
-            </Switch.Root>
-        </SwitchContainer>
+        </>
     )
 }
+
+addPropertyControls(SwitchPrefab, {
+    defaultChecked: {
+        type: ControlType.Boolean,
+        defaultValue: false,
+    },
+
+    useIcons: {
+        type: ControlType.Boolean,
+        defaultValue: false,
+    },
+    icons: {
+        hidden: (props) => !props.useIcons,
+        type: ControlType.Array,
+        maxCount: 2,
+        control: { type: ControlType.ComponentInstance },
+    },
+    animation: {
+        type: ControlType.Object,
+        controls: {
+            container: {
+                type: ControlType.Transition,
+                defaultValue: {
+                    type: "tween",
+                    duration: 0.1,
+                    ease: "easeInOut",
+                },
+            },
+            thumb: {
+                type: ControlType.Transition,
+                defaultValue: {
+                    type: "tween",
+                    duration: 0.25,
+                    ease: "easeInOut",
+                },
+            },
+        },
+    },
+    switchProps: {
+        title: "Container",
+        type: ControlType.Object,
+        controls: {
+            height: {
+                type: ControlType.Number,
+                defaultValue: sizes[500],
+            },
+            active: {
+                title: "On",
+                type: ControlType.Color,
+                defaultValue: theme.colors.primary,
+            },
+            hoverActive: {
+                title: "On hover",
+                type: ControlType.Color,
+                defaultValue: theme.colors.primary_hover,
+            },
+            inactive: {
+                title: "Off",
+                type: ControlType.Color,
+                defaultValue: theme.colors.secondary,
+            },
+            hover: {
+                title: "Off hover",
+                type: ControlType.Color,
+                defaultValue: theme.colors.secondaryHover,
+            },
+
+            padding: {
+                type: ControlType.FusedNumber,
+                toggleKey: "paddingPerSide",
+                toggleTitles: ["padding", "padding per side"],
+                valueKeys: [
+                    "paddingTop",
+                    "paddingRight",
+                    "paddingBottom",
+                    "paddingLeft",
+                ],
+                valueLabels: ["T", "R", "B", "L"],
+                defaultValue: 2,
+            },
+            focus: {
+                type: ControlType.Object,
+                controls: {
+                    offset: {
+                        type: ControlType.Number,
+                        defaultValue: 0,
+                    },
+                    width: {
+                        type: ControlType.Number,
+                        defaultValue: 1,
+                    },
+                    color: {
+                        type: ControlType.Color,
+                        defaultValue: theme.colors.signal,
+                    },
+                },
+            },
+        },
+    },
+    thumbProps: {
+        title: "Thumb",
+        type: ControlType.Object,
+        controls: {
+            size: {
+                type: ControlType.Number,
+                defaultValue: sizes[400],
+            },
+            active: {
+                type: ControlType.Color,
+                defaultValue: theme.colors.primary,
+            },
+            inactive: {
+                type: ControlType.Color,
+                defaultValue: theme.colors.secondary,
+            },
+        },
+    },
+    transition: {
+        type: ControlType.Transition,
+    },
+})
