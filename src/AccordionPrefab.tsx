@@ -357,7 +357,13 @@ export function AccordionPrefab(props: any) {
                                         </CustomIconHolder>
                                     )}
                                 </AccordionHeader>
-                                <AccordionContent css={contentStyles}>
+                                <AccordionContent
+                                    as={motion.div}
+                                    initial="closed"
+                                    animate={currentItem == `item-${i + 1}` ? "open" : "closed"}
+                                    exit="closed"
+                                    variants={contentVariants}
+                                    transition={animation?.expand} css={contentStyles}>
                                     {RenderTarget.current() === "CANVAS" ? (
                                         <div
                                             dangerouslySetInnerHTML={{
@@ -366,15 +372,9 @@ export function AccordionPrefab(props: any) {
                                         ></div>
                                     ) : (
                                         <AnimatePresence>
-                                            <motion.div
-                                                initial="closed"
-                                                animate="open"
-                                                exit="closed"
-                                                variants={contentVariants}
-                                                transition={animation?.expand}
-                                            >
-                                                {item.content}
-                                            </motion.div>
+
+                                            {item.content}
+
                                         </AnimatePresence>
                                     )}
                                 </AccordionContent>
