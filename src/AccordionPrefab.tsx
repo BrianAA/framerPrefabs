@@ -88,45 +88,8 @@ const AccordionHeader = React.forwardRef(
 )
 const AccordionContent = styled(Accordion.Content, {
     overflow: "hidden",
-    color: content?.color,
-    background: content?.background,
-    fontFamily: content?.font?.fontFamily,
-    fontWeight: content?.font?.fontWeight,
-    fontSize: content?.font?.fontSize,
-    lineHeight: content?.line,
-    letterSpacing: content?.spacing + "em",
-    textAlign: content.font?.textAlign,
-    textTransform: content?.transform,
-    padding: content?.paddingPerSide
-        ? `${content?.paddingTop}px ${content?.paddingRight}px ${content?.paddingBottom}px ${content?.paddingLeft}px`
-        : `${content?.padding}px`,
     "& p,h1,h2,h3,h4,h5,h6": {
         all: "unset",
-    },
-    "& a": {
-        textDecoration: content?.link?.decoration,
-        color: content?.link?.color,
-        textTransform: content?.link?.transform,
-    },
-    "& ul": {
-        listStyle: content?.list?.unordered?.style,
-        margin: 0,
-        padding: content?.list?.unordered?.paddingPerSide
-            ? `${content?.list?.unordered?.paddingTop}px ${content?.list?.unordered?.paddingRight}px ${content?.list?.unordered?.paddingBottom}px ${content?.list?.unordered?.paddingLeft}px`
-            : `${content?.list?.unordered?.padding}px`,
-        "& li::marker": {
-            color: content?.list?.unordered?.color,
-        },
-    },
-    "& ol": {
-        listStyle: content?.list?.ordered?.style,
-        margin: 0,
-        padding: content?.list?.ordered?.paddingPerSide
-            ? `${content?.list.ordered?.paddingTop}px ${content?.list.ordered?.paddingRight}px ${content?.list.ordered?.paddingBottom}px ${content?.list.ordered?.paddingLeft}px`
-            : `${content?.list.ordered?.padding}px`,
-        "& li::marker": {
-            color: content?.list?.ordered.color,
-        },
     },
 })
 
