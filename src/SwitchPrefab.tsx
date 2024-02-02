@@ -73,7 +73,7 @@ const Flex = styled("div", {
  * @framerSupportedLayoutWidth fixed
  * @framerSupportedLayoutHeight auto
  */
-export default function SwitchPrefab(props: any) {
+export function SwitchPrefab(props: any) {
     const {
         defaultChecked,
         useIcons,
