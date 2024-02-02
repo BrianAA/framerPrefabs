@@ -361,7 +361,7 @@ export function AccordionPrefab(props: any) {
                                                 }}
                                             ></div>
                                         ) : (
-                                            { item.content }
+                                            item.content
                                         )}
                                     </AccordionContent>
                                 </AnimatePresence>
