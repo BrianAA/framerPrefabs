@@ -10,7 +10,6 @@ import { SkeletonBox } from "./SkeletonBox"
 import { v4 as uuidv4 } from "uuid"
 
 
-//Handles the Expansion animation for opening and closing the content
 const contentVariants = {
     open: { opacity: 1, height: "auto" },
     closed: { opacity: 0, height: 0 },
@@ -21,7 +20,6 @@ const displayVariants = {
     visible: { opacity: 0 },
     hidden: { opacity: 1 },
 }
-
 
 const AccordionRoot = styled(Accordion.Root, {
     display: "flex",
@@ -117,12 +115,13 @@ export function AccordionPrefab(props: any) {
         header,
         content,
     } = props
+
     const openIcon = icons.length > 0 ? icons[0] : "⚠️"
     const closeIcon = icons.length > 1 ? icons[1] : "⚠️"
-    const [currentItem, setCurrentItem] = useState("")
+    const [currentItem, setCurrentItem] = useState(`item-${activeItem}`)
     const [loading, setLoading] = useState(true)
 
-    //Handles when component is loading. 
+    //Handles when component is loading.
     useEffect(() => {
         setLoading(false)
     }, [])
@@ -179,8 +178,7 @@ export function AccordionPrefab(props: any) {
         width: useDefaultIcon && header?.icon?.width + "px",
     }
 
-
-    const contentStyles = {
+    const contentStyles = css({
         color: content?.color,
         background: content?.background,
         fontFamily: content?.font?.fontFamily,
@@ -218,13 +216,19 @@ export function AccordionPrefab(props: any) {
                 color: content?.list?.ordered.color,
             },
         },
-    }
+    })
 
     return (
         <>
             {loading ? (
-                items.length > 0 && items.map((item, i) => {
-                    return <SkeletonBox key={i} style={{ height: header?.height, width: "100%" }} />
+                items.length > 0 &&
+                items.map((item, i) => {
+                    return (
+                        <SkeletonBox
+                            key={i}
+                            style={{ height: header?.height, width: "100%" }}
+                        />
+                    )
                 })
             ) : (
                 <AccordionRoot
@@ -234,6 +238,7 @@ export function AccordionPrefab(props: any) {
                     onValueChange={(e) => setCurrentItem(e)}
                     type="single"
                     collapsible
+                    value={currentItem}
                 >
                     {items.length > 0 &&
                         items.map((item, i) => (
@@ -257,7 +262,8 @@ export function AccordionPrefab(props: any) {
                                                         : "closed"
                                                 }
                                                 transition={
-                                                    animation?.iconDefault?.transition
+                                                    animation?.iconDefault
+                                                        ?.transition
                                                 }
                                                 variants={iconVariants}
                                             >
@@ -307,7 +313,9 @@ export function AccordionPrefab(props: any) {
                                             openIcon
                                         )
                                     ) : (
-                                        <CustomIconHolder css={customIconHolderStyles}>
+                                        <CustomIconHolder
+                                            css={customIconHolderStyles}
+                                        >
                                             <motion.div
                                                 initial="visible"
                                                 animate={
@@ -348,12 +356,8 @@ export function AccordionPrefab(props: any) {
                                 </AccordionHeader>
                                 <AnimatePresence>
                                     <AccordionContent
-                                        as={motion.div}
-                                        initial="closed"
-                                        animate={currentItem == `item-${i + 1}` ? "open" : "closed"}
-                                        exit="closed"
-                                        variants={contentVariants}
-                                        transition={animation?.expand} css={contentStyles}>
+                                        className={contentStyles()}
+                                    >
                                         {RenderTarget.current() === "CANVAS" ? (
                                             <div
                                                 dangerouslySetInnerHTML={{
@@ -361,7 +365,20 @@ export function AccordionPrefab(props: any) {
                                                 }}
                                             ></div>
                                         ) : (
-                                            item.content
+                                            <motion.div
+                                                initial="closed"
+                                                animate={
+                                                    currentItem ==
+                                                        `item-${i + 1}`
+                                                        ? "open"
+                                                        : "closed"
+                                                }
+                                                exit="closed"
+                                                variants={contentVariants}
+                                                transition={animation?.expand}
+                                            >
+                                                {item.content}
+                                            </motion.div>
                                         )}
                                     </AccordionContent>
                                 </AnimatePresence>
@@ -372,7 +389,6 @@ export function AccordionPrefab(props: any) {
         </>
     )
 }
-
 
 addPropertyControls(AccordionPrefab, {
     ...SharedControlProps,
