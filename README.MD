@@ -1,5 +1,5 @@
 # Framer Prefabs
-Welcome to framer prefabs github repository. For documentation and detail ways to get started please refer to our [documentation site.](www.framerprefabs.com)
+Welcome to framer prefabs github repository. For documentation and detail ways to get started please refer to our [documentation site.](https://www.framerprefabs.com)
 
 ## Contributing to Framer Prefabs
 Hello there! So glad you want to help out with Framer Prefabs 🤗 You’re the best. Here’s a guide for how you can contribute to the project.
@@ -15,7 +15,7 @@ The things we need the most help for the library and its community are:
 
 🎬 **Create tutorials**. Send them to us and we’ll happily share them! We have a [youtube channel here ](https://youtube.com/@FramerPrefabs?si=nyofZ_Cal6dOPgQw) and even add your channel for cross reference and support.
 
-## Edit our [Docs](www.framerprefabs.com)
+## Edit our [Docs](https://www.framerprefabs.com)
 Our docs are on framer. We sadly cannot open them up directly to folks or we would have to pay for everyone to be an editor. However you can open a issue on github and suggestion a fix or improvement.
 
 ### Code of Conduct
