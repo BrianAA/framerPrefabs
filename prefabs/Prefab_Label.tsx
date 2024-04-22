@@ -10,7 +10,6 @@
 
 import React, { useRef, useState, useEffect } from "react"
 import { ControlType, addPropertyControls, RenderTarget, withCSS } from "framer"
-import { v4 as uuidv4 } from "uuid"
 
 const _root = React.forwardRef(({ ...props }, ref) => {
     return (

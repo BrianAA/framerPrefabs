@@ -56,6 +56,7 @@ const States = {
  */
 export default function Prefab_Checkbox(props) {
     const {
+        onStateChange,
         onActive, // Event for on active
         onInActive, //Event with inactive
         onFocusInactive, //Event when in focus
@@ -124,7 +125,7 @@ export default function Prefab_Checkbox(props) {
     useEffect(() => {
         switch (state) {
             case States.inActive:
-                onInActive && onInActive()
+                onInActive && onInActive(true)
                 break
             case States.active:
                 onActive && onActive()
@@ -141,6 +142,7 @@ export default function Prefab_Checkbox(props) {
             default:
                 break
         }
+        // onStateChange && onStateChange(state)
     }, [state])
 
     //Sets up parent and event listeners
@@ -199,11 +201,11 @@ export default function Prefab_Checkbox(props) {
     return (
         <span ref={checkboxRef} data-prefab-eventcontroller="checkbox">
             <Checkbox
-                id={uid}
-                name={name}
+                id={uid ? uid : undefined}
+                name={name ? name : undefined}
                 required={required}
                 value={checked}
-                form={formID}
+                form={formID ? formID : undefined}
             />
             <Prefab_EventSymbol style={style} />
         </span>

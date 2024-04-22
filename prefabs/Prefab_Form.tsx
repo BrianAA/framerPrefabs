@@ -204,7 +204,7 @@ export default function Prefab_Form(props) {
             noValidate
             ref={formRef}
             onReset={handleReset}
-            id={uid}
+            id={uid ? uid : undefined}
             onSubmit={handleSubmit}
         >
             <Prefab_EventSymbol />

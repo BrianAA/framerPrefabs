@@ -69,7 +69,12 @@ export default function Prefab_Text(props) {
     }
 
     return (
-        <Text ref={TextRef} tag={tag} id={uid} style={{ ...setStyles }}>
+        <Text
+            ref={TextRef}
+            tag={tag}
+            id={uid ? uid : undefined}
+            style={{ ...setStyles }}
+        >
             {text}
         </Text>
     )

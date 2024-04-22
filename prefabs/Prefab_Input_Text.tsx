@@ -14,9 +14,7 @@ import {
     addPropertyControls,
     RenderTarget,
     withCSS,
-    OverlayTransitionOptions,
 } from "framer"
-import Prefab_EventSymbol from "https://framer.com/m/Prefab-EventSymbol-StIR.js@yScBVQP1siE1M9GNONGi"
 import validator from "validator"
 
 //Creates a HTML Input component
@@ -297,18 +295,18 @@ export default function Prefab_Input_Text(props) {
     return (
         <Input
             disabled={disabled}
-            form={formID}
+            form={formID ? formID : undefined}
             required={required}
             type={inputType}
             ref={inputRef}
-            name={name}
+            name={name ? name : undefined}
             onFocus={() => setInputState(inputStates.focus)}
             onBlur={() => setInputState(inputStates.default)}
             style={setStyles}
             placeholder={placeholder}
             onChange={(e) => handleChange(e)}
             value={value}
-            aria-describedby={ariaDescribedby}
+            aria-describedby={ariaDescribedby ? ariaDescribedby : undefined}
             autoComplete={`${autocomplete}`}
         />
     )

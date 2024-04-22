@@ -189,11 +189,11 @@ export default function Prefab_Switch(props) {
     return (
         <span ref={checkboxRef} data-prefab-eventcontroller="switch">
             <Switch
-                id={uid}
-                name={name}
+                id={uid ? uid : undefined}
+                name={name ? name : undefined}
                 required={required}
                 value={checked}
-                form={formID}
+                form={formID ? formID : undefined}
             />
             <Prefab_EventSymbol style={style} />
         </span>

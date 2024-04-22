@@ -65,7 +65,7 @@ export default function Prefab_Helper(props) {
         <Helper
             aria-live={helperType == "hint" ? "polite" : "assertive"}
             style={{ ...setStyles }}
-            id={uid}
+            id={uid ? uid : undefined}
         >
             {text}
         </Helper>
