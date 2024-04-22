@@ -21,6 +21,12 @@ Our docs are on framer. We sadly cannot open them up directly to folks or we wou
 ### Code of Conduct
 All interactions should be done with care following our [Code of Conduct](/CODE_OF_CONDUCT.md).
 
+## Code contributions
+This repo is just a snapshot of each prefab in its current version. If you are looking to develop and contribute code here are the steps:
+
+### Coming soon
+We will be providing a test file for framer you can remix and will have the latest prefabs loaded in as all developmenet is done directly in framer to avoid having to set up any remote connections. 
+
 
 ### Pull Requests
 We welcome contributions in the form of improvements or new features and will gladly review your pull request. To help us understand your work, please use a descriptive commit message and include a brief explanation of your changes.
