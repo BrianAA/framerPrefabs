@@ -1,10 +1,20 @@
+// MIT License
+
+// Copyright © Framer Prefabs & Contributors
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 import React, { useState, useRef, useEffect } from "react"
 import * as Framer from "framer"
 import { ControlType, addPropertyControls, RenderTarget, withCSS } from "framer"
 import Prefab_EventSymbol from "https://framer.com/m/Prefab-EventSymbol-StIR.js@yScBVQP1siE1M9GNONGi"
 
+//TODO: Add support for MailChimp
 const mailchimpRegex = /^https?:\/\/([^\/]+)[^\?]+\??(.+)$/
-
 const parseMailChimpUrl = (url) => {
     var ref
     const [, domain, parameters] =
@@ -14,12 +24,8 @@ const parseMailChimpUrl = (url) => {
             : [null, null, null]
     return [domain, new URLSearchParams(parameters)]
 }
-//Exposes any properties of the component
 
 /**
- * These annotations control how your component sizes
- * Learn more: https://www.framer.com/developers/#code-components-auto-sizing
- * @framerDisableUnlink
  * @framerSupportedLayoutWidth auto-prefer-fixed
  * @framerSupportedLayoutHeight auto-prefer-fixed
  */
@@ -53,12 +59,14 @@ export default function Prefab_Form(props) {
             })
             //Send event
             formRef.current.dispatchEvent(event)
+
             // Initialize an object to hold form data
             let formObject = {}
-
             const formControls = document.querySelectorAll(
                 `[form="${uid}"]:not(button[type="submit"]):not(button[type="reset"])`
             )
+
+            //Create form Object
             for (let i = 0; i < formControls.length; i++) {
                 const key = formControls[i]?.name
                 const value = formControls[i]?.value
@@ -73,7 +81,7 @@ export default function Prefab_Form(props) {
                 Object.values(isValid).every((value) => value === true)
 
             if (allControlsValidated) {
-                // Proceed with form submission
+                // TODO: Support Mailchimp submission
                 if (service == "mailChimp") {
                     AttemptChimp()
                 } else {

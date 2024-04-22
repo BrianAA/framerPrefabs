@@ -1,4 +1,12 @@
-// ALL RIGHTS RESERVED TO FRAMER PREFABS
+// MIT License
+
+// Copyright © Framer Prefabs & Contributors
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import React, { useState, useRef, useEffect } from "react"
 import { ControlType, addPropertyControls, RenderTarget, withCSS } from "framer"
@@ -16,6 +24,7 @@ const _input = React.forwardRef(({ ...props }, ref) => {
     )
 })
 
+//Define styles
 const Checkbox = withCSS(_input, [
     `.prefab-checkbox{
         border:0;
@@ -32,6 +41,7 @@ const Checkbox = withCSS(_input, [
     }`,
 ])
 
+//Supported states
 const States = {
     active: "active",
     inActive: "inActive",
@@ -39,8 +49,8 @@ const States = {
     focusActive: "focus-Active",
     error: "error",
 }
+
 /**
- * @framerDisableUnlink
  * @framerSupportedLayoutWidth auto-prefers-fixed
  * @framerSupportedLayoutHeight auto-prefers-fixed
  */
@@ -57,7 +67,6 @@ export default function Prefab_Checkbox(props) {
         defaultChecked, // If checked when mounted
         uid, // its unique id
         style, // styles from container
-        ariaDescribedby,
     } = props
     const [checked, setChecked] = useState(defaultChecked) //Handles binary state
     const [framerBtn, setFramerBtn] = useState(null)
@@ -65,6 +74,7 @@ export default function Prefab_Checkbox(props) {
     const [state, setState] = useState(
         defaultChecked ? States.active : States.inActive
     )
+    //Listen to Form events from Form Prefab
     useEffect(() => {
         //Form has been reseted
         function handleReset() {
@@ -95,16 +105,13 @@ export default function Prefab_Checkbox(props) {
         }
     }, [formID, checked])
 
-    //Update state based on checked.
     useEffect(() => {
         if (framerBtn) {
             framerBtn.setAttribute("aria-checked", `${checked}`)
         }
         if (required && !checked) {
-            // Checkbox is required but not checked, set error state
             SendValidation(false)
         } else {
-            // If no error, ensure the state is set correctly
             SendValidation(true)
         }
         if (checked) {

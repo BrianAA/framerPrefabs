@@ -1,6 +1,12 @@
-/**
- * Copyright (c) [2024] [Framer Prefabs] [Brian Alfaro]
- */
+// MIT License
+
+// Copyright © Framer Prefabs & Contributors
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import React, { useState, useRef, useEffect } from "react"
 import { ControlType, addPropertyControls, RenderTarget, withCSS } from "framer"
@@ -15,7 +21,6 @@ const copyStates = {
 }
 
 /**
- * @framerDisableUnlink
  * @framerSupportedLayoutWidth auto-prefer-fixed
  * @framerSupportedLayoutHeight auto-prefer-fixed
  */
@@ -52,26 +57,14 @@ export default function Prefab_Copy_Button(props) {
                 setFramerBtn(parent) //Set for reference
                 //Handle Click
                 const handleClick = () => {
-                    onCopying && onCopying()
-                    try {
-                        navigator.clipboard.writeText(copyData)
-                        onSuccess && onSuccess()
-                        parent.setAttribute("aria-label", ariaSuccess)
-                        setTimeout(() => {
-                            onDefault && onDefault()
-                            parent.setAttribute("aria-label", ariaDefault)
-                        }, timeout * 1000)
-                    } catch (error) {
-                        console.warn(error.message)
-                        onError && onError()
-                        parent.setAttribute("aria-label", ariaError)
-                    }
+                    Copy(parent)
                 }
 
                 const handleKeyDown = (event) => {
                     // Check if key is Enter or Space
-                    if (event.key === " ") {
+                    if (event.key === " " || event.key === "Enter") {
                         event.preventDefault()
+                        Copy(parent)
                     }
                 }
                 parent.setAttribute("role", "button")
@@ -89,6 +82,22 @@ export default function Prefab_Copy_Button(props) {
         }
     }, [spanRef])
 
+    function Copy(parent) {
+        onCopying && onCopying()
+        try {
+            navigator.clipboard.writeText(copyData)
+            onSuccess && onSuccess()
+            parent.setAttribute("aria-label", ariaSuccess)
+            setTimeout(() => {
+                onDefault && onDefault()
+                parent.setAttribute("aria-label", ariaDefault)
+            }, timeout * 1000)
+        } catch (error) {
+            console.warn(error.message)
+            onError && onError()
+            parent.setAttribute("aria-label", ariaError)
+        }
+    }
     return (
         <span
             ref={spanRef}
