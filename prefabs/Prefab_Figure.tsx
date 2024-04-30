@@ -23,7 +23,8 @@ export default function Prefab_Figure(props) {
             {instance && instance[0] && cloneElement(instance[0], {
                 style: {
                     ...instance[0].props.style,
-                    width: "100%"
+                    width: "100%",
+                    height: "100%"
                 }
             })}
         </figure>

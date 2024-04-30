@@ -116,7 +116,7 @@ addPropertyControls(Prefab_Helper, {
             },
             color: {
                 type: ControlType.Color,
-                defaultValue: "#5f3dc4",
+                defaultValue: "#111111",
             },
             transform: {
                 type: ControlType.Enum,

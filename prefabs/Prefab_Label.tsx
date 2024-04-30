@@ -59,7 +59,16 @@ const Label = withCSS(_root, [
  * @framerSupportedLayoutHeight auto-prefer-fixed
  */
 export default function Prefab_Label(props) {
-    const { text, styles, instance, htmlFor, showRequired, style, wcag } = props
+    const {
+        text,
+        styles,
+        nested,
+        instance,
+        htmlFor,
+        showRequired,
+        style,
+        wcag,
+    } = props
     const labelRef = useRef()
     const setStyles = {
         "--prefab-label-fontSize": styles?.font?.fontSize,
@@ -73,12 +82,40 @@ export default function Prefab_Label(props) {
         "--prefab-label-textAlign": styles?.font?.textAlign,
     }
     const LabelInstance = instance && instance[0]
+    //Sends Event to
+    function AssignLabel() {
+        const event = new CustomEvent(`AssignLabel-${props.htmlFor}`, {
+            detail: {
+                label: htmlFor + "-label",
+            },
+            bubbles: true,
+        })
+        if (labelRef.current) {
+            console.log("assignin")
+            labelRef.current.dispatchEvent(event)
+        }
+    }
+    useEffect(() => {
+        if (!nested && htmlFor) {
+            AssignLabel()
+        }
+    }, [htmlFor, nested])
 
+    function handleClick() {
+        const event = new CustomEvent(`label-clicked-${props.htmlFor}`, {
+            bubbles: true,
+        })
+        if (labelRef.current) {
+            labelRef.current.dispatchEvent(event)
+        }
+    }
     return (
         <Label
-            showRequired={showRequired}
+            ref={labelRef}
             style={{ ...setStyles }}
             htmlFor={htmlFor}
+            onClick={handleClick}
+            id={htmlFor + "-Label"}
         >
             {text}
         </Label>
@@ -100,6 +137,10 @@ addPropertyControls(Prefab_Label, {
     showRequired: {
         type: ControlType.Boolean,
         defaultValue: false,
+    },
+    nested: {
+        type: ControlType.Boolean,
+        defaultValue: true,
     },
     styles: {
         type: ControlType.Object,

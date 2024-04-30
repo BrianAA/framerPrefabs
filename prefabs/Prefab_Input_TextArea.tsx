@@ -14,7 +14,9 @@ import validator from "validator"
 
 //Creates a HTML Input component
 const _input = React.forwardRef(({ ...props }, ref) => {
-    return <input ref={ref} tabIndex="-1" className="prefab-input" {...props} />
+    return (
+        <textarea tabIndex="-1" ref={ref} className="prefab-input" {...props} />
+    )
 })
 
 //Applies the styles to the input. Removes all others styles for empty box
@@ -29,9 +31,20 @@ const Input = withCSS(_input, [
         --prefab-input-letterSpacing:blue; 
         --prefab-input-lineHeight:1.1;
         --prefab-input-textAlign:left;
+        --prefab-input-resize:vertical;
+        --prefab-input-scrollbarWidth:8px;
+        --prefab-input-scrollbarBorderRadius:8px;
+        --prefab-input-scrollbarBackground:#f8f9fa;
+        --prefab-input-thumbBorderRadius:4px;
+        --prefab-input-thumbColor:#dee2e6;
+        --prefab-input-hoverColor:#ced4da;
+        --prefab-input-focusColor:#ced4da;
+        --prefab-input-resize-area:transparent;
+
     }`,
     `.prefab-input{
         all:unset;
+        overflow:auto;
         font-family:var(--prefab-input-fontFamily);
         font-size:var(--prefab-input-fontSize);
         font-weight:var(--prefab-input-fontWeight);
@@ -40,9 +53,35 @@ const Input = withCSS(_input, [
         text-transform:var(--prefab-input-textTransform);
         letter-spacing:var(--prefab-input-letterSpacing);
         line-height:var(--prefab-input-line-height);
+        resize:var(--prefab-input-resize);
+
     }`,
     `.prefab-input::placeholder{
         color:var(--prefab-input-placeholder-color)
+    }`,
+    `.prefab-input::-webkit-scrollbar {
+            width: var(--prefab-input-scrollbarWidth);
+        }`,
+    `.prefab-input::-webkit-scrollbar-track {
+        background:var(--prefab-input-scrollbarBackground);
+        padding: 4px;
+        border-radius: var(--prefab-input-scrollbarBorderRadius);,
+    }`,
+    `.prefab-input::-webkit-scrollbar-thumb {
+        background-color: var(--prefab-input-thumbColor);
+        border: transparent;
+        border-radius:var(--prefab-input-thumbBorderRadius);
+    }`,
+    `.prefab-input::-webkit-scrollbar-thumb:hover {
+        background-color: var(--prefab-input-hoverColor);
+    }`,
+    `.prefab-input::-webkit-scrollbar-thumb:active {
+        background-color: var(--prefab-input-focusColor);
+    }`,
+    `.prefab-input::-webkit-resizer {
+        border: var(--prefab-input-resize-area);
+        background: transparent;
+        outline: none;
     }`,
 ])
 
@@ -57,7 +96,7 @@ const inputStates = {
  * @framerSupportedLayoutWidth auto-prefer-fixed
  * @framerSupportedLayoutHeight auto-prefer-fixed
  */
-export default function Prefab_Input_Text(props) {
+export default function Prefab_Input_TextArea(props) {
     const {
         onDefault, //onBlur
         ariaDescribedby,
@@ -70,23 +109,22 @@ export default function Prefab_Input_Text(props) {
         onDisabledHasValue,
         style, //Framer styles
         disabled, //If input is disabled
-        inputType, //Supported input types email, url, text,phone
         name, //Name of the control for formID use
         formID, // The associated formID and its id.
         required, // If the control is required
-        styles, // The font styles for the placeholder and text
+        textStyles, // The font styles for the placeholder and text
         placeholder, // Placeholder value
         validationType, //What type of custom validation
         contains, // Validation logic
         equals, // Validation logic
         isAlpha, // Validation logic
         isAlphanumeric, // Validation logic
-        isEmail, // Validation logic
-        isPostalCode, // Validation logic
-        isURL, // Validation logic
         matches, // Validation logic
         uid, // The unique id for this control
-        autocomplete, //Sets clear button id if there is one
+        setMaxLength, //Sets if there is a maxlength
+        maxLength, //the character count
+        resize, //sets resize prop
+        scrollbar,
     } = props
 
     const inputRef: any = useRef() //Ref used to send out events
@@ -94,6 +132,7 @@ export default function Prefab_Input_Text(props) {
     const [inputState, setInputState] = useState(inputStates.default) //Controls the states
     const [framerComponent, setFramerComponent] = useState(null) //Main parent
     const [clearBtn, setClearBtn] = useState(null)
+
     //This effect handles formID reset and force focus
     useEffect(() => {
         const Clear = (event) => { }
@@ -189,23 +228,10 @@ export default function Prefab_Input_Text(props) {
                 return validator.isAlpha(_value, isAlpha.locale)
             case "isAlphanumeric":
                 return validator.isAlphanumeric(_value, isAlphanumeric.locale)
-            case "isEmail":
-                return validator.isEmail(_value, {
-                    blacklisted_chars: isEmail.blacklisted_chars,
-                    host_blacklist: isEmail.host_blacklist,
-                })
             case "isLowercase":
                 return validator.isLowercase(_value)
-            case "isPostalCode":
-                return validator.isPostalCode(_value, isPostalCode.locale)
             case "isUppercase":
                 return validator.isUppercase(_value)
-            case "isURL":
-                return validator.isURL(_value, {
-                    require_protocol: isURL.require_protocol,
-                    protocols: isURL.protocols,
-                })
-                break
             case "matches":
                 // Converting string patterns to RegExp objects
                 let regexPatterns = []
@@ -282,37 +308,52 @@ export default function Prefab_Input_Text(props) {
     //Sets styles for font applies a outline border only on the canvas
     const setStyles = {
         ...style,
-        "--prefab-input-fontSize": styles?.font?.fontSize,
-        "--prefab-input-fontWeight": styles?.font?.fontWeight,
-        "--prefab-input-fontFamily": styles?.font?.fontFamily,
-        "--prefab-input-color": styles?.color,
-        "--prefab-input-placeholder-color": styles?.placeholder,
-        "--prefab-input-textTransform": styles?.transform,
-        "--prefab-input-letterSpacing": styles?.spacing,
-        "--prefab-input-lineHeight": styles?.line,
-        "--prefab-input-textAlign": styles?.font?.textAlign,
+        "--prefab-input-fontSize": textStyles?.font?.fontSize,
+        "--prefab-input-fontWeight": textStyles?.font?.fontWeight,
+        "--prefab-input-fontFamily": textStyles?.font?.fontFamily,
+        "--prefab-input-color": textStyles?.color,
+        "--prefab-input-placeholder-color": textStyles?.placeholder,
+        "--prefab-input-textTransform": textStyles?.transform,
+        "--prefab-input-letterSpacing": textStyles?.spacing,
+        "--prefab-input-lineHeight": textStyles?.line,
+        "--prefab-input-textAlign": textStyles?.font?.textAlign,
+        "--prefab-input-scrollbarWidth": scrollbar?.trackWidth,
+        "--prefab-input-scrollbarBorderRadius": scrollbar?.trackRadius,
+        "--prefab-input-scrollbarBackground": scrollbar?.track,
+        "--prefab-input-thumbBorderRadius": scrollbar?.thumbRadius,
+        "--prefab-input-thumbColor": scrollbar?.thumb,
+        " --prefab-input-hoverColor": scrollbar?.thumbHover,
+        "--prefab-input-focusColor": scrollbar?.thumbFocus,
     }
     return (
         <Input
             disabled={disabled}
             form={formID ? formID : undefined}
             required={required}
-            type={inputType}
             ref={inputRef}
             name={name ? name : undefined}
             onFocus={() => setInputState(inputStates.focus)}
             onBlur={() => setInputState(inputStates.default)}
-            style={setStyles}
+            style={{
+                ...setStyles,
+                "--prefab-input-resize": resize,
+                "--prefab-input-resize-area":
+                    RenderTarget.current() == "CANVAS"
+                        ? "1px dashed black"
+                        : "transparent",
+            }}
             placeholder={placeholder}
+            cols={props.cols}
+            rows={props.rows}
             onChange={(e) => handleChange(e)}
             value={value}
             aria-describedby={ariaDescribedby ? ariaDescribedby : undefined}
-            autoComplete={`${autocomplete}`}
+            maxLength={setMaxLength ? maxLength : undefined}
         />
     )
 }
 
-addPropertyControls(Prefab_Input_Text, {
+addPropertyControls(Prefab_Input_TextArea, {
     onDefault: {
         type: ControlType.EventHandler,
     },
@@ -340,9 +381,6 @@ addPropertyControls(Prefab_Input_Text, {
     id: {
         type: ControlType.String,
     },
-    autocomplete: {
-        type: ControlType.Boolean,
-    },
     name: {
         title: "name*",
         type: ControlType.String,
@@ -358,14 +396,33 @@ addPropertyControls(Prefab_Input_Text, {
         type: ControlType.String,
         defaultValue: "Placeholder",
     },
-    inputType: {
-        type: ControlType.Enum,
-        options: ["text", "email", "url"],
-        optionTitles: ["Text", "Email", "URL"],
-    },
     disabled: {
         type: ControlType.Boolean,
         defaultValue: false,
+    },
+    rows: {
+        type: ControlType.Number,
+        displayStepper: true,
+        defaultValue: 8,
+    },
+    cols: {
+        type: ControlType.Number,
+        displayStepper: true,
+        defaultValue: 50,
+    },
+    resize: {
+        type: ControlType.Enum,
+        options: ["none", "vertical", "horizontal", "both"],
+        optionTitles: ["None", "Vertical", "Horizontal", "Both"],
+    },
+    setMaxLength: {
+        type: ControlType.Boolean,
+        defaultValue: false,
+    },
+    maxLength: {
+        hidden: (props) => !props.setMaxLength,
+        type: ControlType.Number,
+        defaultValue: 500,
     },
     ariaDescribedby: {
         type: ControlType.String,
@@ -379,11 +436,8 @@ addPropertyControls(Prefab_Input_Text, {
             "isAlpha",
             "isAlphanumeric",
             "isAscii",
-            "isEmail",
             "isLowercase",
-            "isPostalCode",
             "isUppercase",
-            "isURL",
             "matches",
         ],
         optionTitles: [
@@ -393,11 +447,8 @@ addPropertyControls(Prefab_Input_Text, {
             "isAlpha",
             "isAlphanumeric",
             "isAscii",
-            "isEmail",
             "isLowercase",
-            "isPostalCode",
             "isUppercase",
-            "isURL",
             "matches",
         ],
     },
@@ -428,193 +479,6 @@ addPropertyControls(Prefab_Input_Text, {
         type: ControlType.Array,
         control: {
             type: ControlType.String,
-        },
-    },
-    isEmail: {
-        hidden: (props) => props.validationType != "isEmail",
-        description: "check if the string is an email.",
-        type: ControlType.Object,
-        controls: {
-            host_blacklist: {
-                type: ControlType.Array,
-                description:
-                    "Validation fails if the email's domain (part after the @ symbol) is on the host_blacklist",
-                control: {
-                    type: ControlType.String,
-                },
-            },
-            blacklisted_chars: {
-                type: ControlType.String,
-                description:
-                    "If blacklisted_chars receives a string, then the validator will reject emails that include any of the characters in the string, in the name part.",
-            },
-        },
-    },
-    isURL: {
-        hidden: (props) => props.validationType != "isURL",
-        description: "check if the string is a URL.",
-        type: ControlType.Object,
-        controls: {
-            require_protocol: {
-                type: ControlType.Boolean,
-                description:
-                    " If set to true isURL will return false if protocol is not present in the URL.",
-            },
-            protocols: {
-                type: ControlType.Array,
-                description:
-                    "valid protocols can be modified with this option.",
-                control: {
-                    type: ControlType.String,
-                },
-                defaultValue: ["http", "https"],
-            },
-        },
-    },
-    isPostalCode: {
-        hidden: (props) => props.validationType != "isPostalCode",
-        description: "check if the string is a postal code.",
-        type: ControlType.Object,
-        controls: {
-            locale: {
-                type: ControlType.Enum,
-                options: [
-                    "AD",
-                    "AT",
-                    "AU",
-                    "AZ",
-                    "BA",
-                    "BE",
-                    "BG",
-                    "BR",
-                    "BY",
-                    "CA",
-                    "CH",
-                    "CN",
-                    "CZ",
-                    "DE",
-                    "DK",
-                    "DO",
-                    "DZ",
-                    "EE",
-                    "ES",
-                    "FI",
-                    "FR",
-                    "GB",
-                    "GR",
-                    "HR",
-                    "HT",
-                    "HU",
-                    "ID",
-                    "IE",
-                    "IL",
-                    "IN",
-                    "IR",
-                    "IS",
-                    "IT",
-                    "JP",
-                    "KE",
-                    "KR",
-                    "LI",
-                    "LK",
-                    "LT",
-                    "LU",
-                    "LV",
-                    "MG",
-                    "MT",
-                    "MX",
-                    "MY",
-                    "NL",
-                    "NO",
-                    "NP",
-                    "NZ",
-                    "PL",
-                    "PR",
-                    "PT",
-                    "RO",
-                    "RU",
-                    "SA",
-                    "SE",
-                    "SG",
-                    "SI",
-                    "SK",
-                    "TH",
-                    "TN",
-                    "TW",
-                    "UA",
-                    "US",
-                    "ZA",
-                    "ZM",
-                ],
-                optionTitles: [
-                    "AD",
-                    "AT",
-                    "AU",
-                    "AZ",
-                    "BA",
-                    "BE",
-                    "BG",
-                    "BR",
-                    "BY",
-                    "CA",
-                    "CH",
-                    "CN",
-                    "CZ",
-                    "DE",
-                    "DK",
-                    "DO",
-                    "DZ",
-                    "EE",
-                    "ES",
-                    "FI",
-                    "FR",
-                    "GB",
-                    "GR",
-                    "HR",
-                    "HT",
-                    "HU",
-                    "ID",
-                    "IE",
-                    "IL",
-                    "IN",
-                    "IR",
-                    "IS",
-                    "IT",
-                    "JP",
-                    "KE",
-                    "KR",
-                    "LI",
-                    "LK",
-                    "LT",
-                    "LU",
-                    "LV",
-                    "MG",
-                    "MT",
-                    "MX",
-                    "MY",
-                    "NL",
-                    "NO",
-                    "NP",
-                    "NZ",
-                    "PL",
-                    "PR",
-                    "PT",
-                    "RO",
-                    "RU",
-                    "SA",
-                    "SE",
-                    "SG",
-                    "SI",
-                    "SK",
-                    "TH",
-                    "TN",
-                    "TW",
-                    "UA",
-                    "US",
-                    "ZA",
-                    "ZM",
-                ],
-            },
         },
     },
     isAlpha: {
@@ -892,7 +756,7 @@ addPropertyControls(Prefab_Input_Text, {
             },
         },
     },
-    styles: {
+    textStyles: {
         type: ControlType.Object,
         controls: {
             font: {
@@ -929,6 +793,39 @@ addPropertyControls(Prefab_Input_Text, {
                 type: ControlType.Enum,
                 options: ["none", "uppercase", "lowercase", "capitalize"],
                 optionTitles: ["None", "Uppercase", "Lowercase", "Capitalize"],
+            },
+        },
+    },
+    scrollbar: {
+        type: ControlType.Object,
+        controls: {
+            track: {
+                type: ControlType.Color,
+                defaultValue: "#5f3dc4",
+            },
+            trackWidth: {
+                type: ControlType.Number,
+                defaultValue: 8,
+            },
+            trackRadius: {
+                type: ControlType.Number,
+                defaultValue: 8,
+            },
+            thumb: {
+                type: ControlType.Color,
+                defaultValue: "#666666",
+            },
+            thumbFocus: {
+                type: ControlType.Color,
+                defaultValue: "#666666",
+            },
+            thumbHover: {
+                type: ControlType.Color,
+                defaultValue: "#666666",
+            },
+            thumbRadius: {
+                type: ControlType.Number,
+                defaultValue: 8,
             },
         },
     },

@@ -35,7 +35,9 @@ export default function Utils_Set_Atrributes(props) {
             }
 
             if (parent && parent !== document) {
-                parent.id = uid ? uid : undefined
+                if (uid) {
+                    parent.id = uid
+                }
                 attributes.forEach((attr) => {
                     parent.setAttribute(attr.name, attr.value)
                 })

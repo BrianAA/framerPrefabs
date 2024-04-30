@@ -26,14 +26,15 @@ export default function Prefab_List(props) {
                 display: "flex",
                 gap: gap,
                 flexDirection: direction == "horizontal" ? "row" : "column",
+                justifyContent: "left",
             }}
         >
             {items && items.length > 0
                 ? items.map((item, i) => {
                     return React.cloneElement(item, {
                         style: {
-                            ...item.props.style,
                             ...props.style,
+                            width: "100%",
                         },
                         role: "listItem",
                     })
