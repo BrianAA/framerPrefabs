@@ -61,9 +61,10 @@ const Label = withCSS(_root, [
 export default function Prefab_Label(props) {
     const {
         text,
+        asTag,
+        instance,
         styles,
         nested,
-        instance,
         htmlFor,
         showRequired,
         style,
@@ -117,7 +118,17 @@ export default function Prefab_Label(props) {
             onClick={handleClick}
             id={htmlFor + "-Label"}
         >
-            {text}
+            {asTag
+                ? instance &&
+                instance[0] &&
+                React.cloneElement(instance[0], {
+                    style: {
+                        ...instance[0]?.props.style,
+                    },
+                    width: "100%",
+                    height: "100%",
+                })
+                : text}
         </Label>
     )
 }
@@ -127,6 +138,17 @@ addPropertyControls(Prefab_Label, {
         title: "htmlFor",
         placeholder: "Input's ID",
         type: ControlType.String,
+    },
+    asTag: {
+        type: ControlType.Boolean,
+        defaultValue: false,
+        description:
+            "Provide your own text to tag element. <label> Your Text </label>",
+    },
+    instance: {
+        hidden: (props) => !props.asTag,
+        type: ControlType.ComponentInstance,
+        description: "Only pass a frame that has text",
     },
     text: {
         title: "Text",
